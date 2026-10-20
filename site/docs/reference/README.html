@@ -101,7 +101,7 @@ body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans 
 </script>
 </head>
 <body>
-<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#nexi-키트">NEXI 키트</a></li><li class="level-2"><a href="#검증과-양식">검증과 양식</a></li><li class="level-2"><a href="#조건이-맞을-때만-쓰는-기법">조건이 맞을 때만 쓰는 기법</a></li></ul></aside><article class="page wiki-content">
+<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#nexi-키트">NEXI 키트</a></li><li class="level-2"><a href="#skill별-상세">skill별 상세</a></li><li class="level-2"><a href="#검증과-양식">검증과 양식</a></li><li class="level-2"><a href="#조건이-맞을-때만-쓰는-기법">조건이 맞을 때만 쓰는 기법</a></li></ul></aside><article class="page wiki-content">
 <header><h1 id="page-title">참조</h1></header>
 <main>
 <h1 id="참조">참조</h1>
@@ -111,11 +111,42 @@ body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans 
 <h2 id="nexi-키트">NEXI 키트</h2>
 <ul>
 <li><a href="../assets/README.html">NEXI 키트</a> — 내려받기와 설치</li>
-<li><a href="SKILLS.html">skill 참조</a> — skill 열 개를 부르는 법, 읽고 쓰는 것, 시작할 때 확인하는 것, 멈추는 경우, 다음 프롬프트. 각 skill의 원문도 여기서 연다.</li>
+<li><a href="SKILLS.html">skill 색인</a> — skill 열 개 중 지금 쓸 것을 고른다. 각 상세 페이지에 입력, 실행하는 사람, 명령, 산출물, 멈춤과 다음 차례가 있다.</li>
+<li><a href="skills/COMMON.html">skill 공통 규칙</a> — 설치된 원문과 버전, 환경, 승인, 원격 실패와 중단 뒤 재개.</li>
 <li><a href="ARTIFACTS.html">산출물 참조</a> — 요구사항 결정 문서, 작업 계약서, 디자인 기준, 증거, 판정 기록, 최종 보고, 이슈 본문의 줄</li>
 <li><a href="CONCEPTS.html">개념 참조</a> — 원칙, 혼자와 팀, 역할, branch, 작업의 종류, 검증, 리뷰와 수용, 상태 줄, 재개</li>
 <li><a href="ENVIRONMENT.html">환경 프로필</a> — 바뀌지 않는 원칙, 고객마다 정하는 것, <code>AGENTS.md</code>에 적는 법, 착수 합의에서 판정하는 법, 검증된 조합</li>
 </ul>
+<h2 id="skill별-상세">skill별 상세</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>준비와 결정</th>
+<th>구현과 마무리</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="skills/nexi-init.html">nexi-init — 프로젝트 시작</a></td>
+<td><a href="skills/nexi-implement.html">nexi-implement — 구현과 증거</a></td>
+</tr>
+<tr>
+<td><a href="skills/nexi-requirements.html">nexi-requirements — 요구사항 결정</a></td>
+<td><a href="skills/nexi-review.html">nexi-review — 독립 리뷰와 기록</a></td>
+</tr>
+<tr>
+<td><a href="skills/nexi-backlog.html">nexi-backlog — 작업과 담당</a></td>
+<td><a href="skills/nexi-merge.html">nexi-merge — 병합과 수용</a></td>
+</tr>
+<tr>
+<td><a href="skills/nexi-contract.html">nexi-contract — 작업 계약서</a></td>
+<td><a href="skills/nexi-finish.html">nexi-finish — 최종 확인</a></td>
+</tr>
+<tr>
+<td><a href="skills/nexi-design.html">nexi-design — 화면 기준</a></td>
+<td><a href="skills/nexi-run.html">nexi-run — 선택적인 반복 실행</a></td>
+</tr>
+</tbody></table></div>
+<p>진행 순서를 찾으면 <a href="../how-to/SOLO_GUIDE.html">혼자</a>, <a href="../how-to/TEAM_GUIDE.html">팀</a>, <a href="../how-to/MIGRATION_GUIDE.html">새 저장소 전환</a> 중에서 고른다.</p>
 <h2 id="검증과-양식">검증과 양식</h2>
 <ul>
 <li><a href="../patterns/VERIFICATION_CONVENTION.html">검증 명령 규약</a> — 검사가 갖출 조건, red 확인, 어느 계층에서 검사할지</li>
