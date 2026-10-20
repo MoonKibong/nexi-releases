@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이미 있는 저장소에 팀 모드 들이기</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; color: #1f2933; line-height: 1.7; }
+h1, h2, h3 { line-height: 1.3; }
+a { color: #155e75; }
+pre { padding: 16px; overflow-x: auto; background: #0f172a; color: #e5e7eb; border-radius: 6px; }
+code { font-family: ui-monospace, monospace; font-size: .9em; }
+pre code { white-space: pre; }
+blockquote { margin: 16px 0; padding: 8px 16px; border-left: 4px solid #1793d1; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 12px; border: 1px solid #d7dde5; text-align: left; vertical-align: top; }
+th { background: #eef4f7; }
+.mermaid { overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+@media (max-width: 760px) { body { font-size: 15px; } table { min-width: 620px; } }
+</style>
+<style id="practice-wiki-shell">
+.wiki-content ol + pre, .wiki-content ol + .table-scroll { margin-left:2.2em; }
+.wiki-content blockquote.wiki-alert { border-left:4px solid #1793d1; background:#eef6fb; color:#1f2933; padding:10px 14px; margin:16px 0; }
+.wiki-content blockquote.wiki-alert .wiki-alert-title { display:block; font-weight:700; margin-bottom:4px; }
+.wiki-content blockquote.wiki-alert-tip { border-left-color:#1a7f37; background:#eef8f0; }
+.wiki-content blockquote.wiki-alert-important { border-left-color:#8250df; background:#f5f0fd; }
+.wiki-content blockquote.wiki-alert-warning { border-left-color:#bf8700; background:#fff8e5; }
+.wiki-content blockquote.reading-guide { border-left:4px solid #1793d1; background:#eef6fb; color:#45525e; font-size:14px; line-height:1.6; padding:8px 14px; margin:0 0 22px; }
+body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+.page { max-width:none; width:100%; margin:0; padding:0; border:0; box-shadow:none; background:transparent; }
+.page > header { display:none; }
+.wiki-global { height:48px; background:#2e2e2e; border-bottom:5px solid #1793d1; color:#fff; display:flex; align-items:center; padding:0 calc((100% - 1840px)/2 + 42px); gap:28px; }
+.wiki-global strong { color:#fff; font-size:15px; letter-spacing:.02em; white-space:nowrap; }
+.wiki-global a { color:#d8d8d8; text-decoration:none; font-size:14px; font-weight:700; }
+.wiki-global a:hover, .wiki-global a:focus, .wiki-global a[aria-current] { color:#fff; text-decoration:underline; }
+.wiki-tools { max-width:1840px; margin:auto; min-height:76px; padding:18px 42px; display:flex; align-items:center; gap:18px; }
+.wiki-tools .crumb { color:#5b6770; font-size:14px; }
+.wiki-tools .home-link { margin-left:auto; color:#087bb8; font-weight:700; text-decoration:none; }
+.audience-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; }
+.audience-internal { background:#5d4037; color:#fff; }
+.audience-client { background:#156f3c; color:#fff; }
+.audience-unspecified { background:#e7ebee; color:#46525a; }
+.asset-badges { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; }
+.asset-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; background:#e9eff4; color:#25465c; }
+.asset-badge.status-reviewed { background:#156f3c; color:#fff; }
+.asset-badge.status-candidate { background:#755b16; color:#fff; }
+.wiki-all-pages { margin-top:46px; padding-top:18px; border-top:2px solid #aeb8c1; }
+.wiki-all-pages details { margin:8px 0; }
+.wiki-all-pages summary { cursor:pointer; color:#087bb8; font-weight:700; }
+.wiki-all-pages ul { margin:7px 0 14px; }
+.wiki-layout { max-width:1840px; margin:28px auto 52px; padding:0 42px; display:grid; grid-template-columns:250px minmax(0, 1fr) 230px; gap:34px; align-items:start; }
+.wiki-toc, .wiki-side { font-size:14px; position:sticky; top:20px; }
+.wiki-toc h2, .wiki-side h2 { font-size:16px; margin:0 0 10px; padding:0 0 9px; border-bottom:1px solid #c8d0d7; }
+.wiki-toc ul { list-style:none; margin:0; padding:0; }
+.wiki-toc li { margin:0; padding:5px 0; line-height:1.35; }
+.wiki-toc li.level-3 { padding-left:16px; font-size:13px; }
+.wiki-toc a, .wiki-side a { color:#087bb8; text-decoration:none; }
+.wiki-toc a:hover, .wiki-side a:hover { text-decoration:underline; }
+.wiki-content { min-width:0; background:#fff; border:1px solid #cbd3da; padding:38px 44px 56px; }
+.wiki-content main > h1:first-child { margin-top:0; font-size:38px; border-bottom:2px solid #aeb8c1; padding-bottom:12px; }
+.wiki-content h2 { border-bottom:1px solid #aeb8c1; font-size:28px; margin-top:38px; }
+.wiki-content h3 { font-size:20px; }
+.wiki-content a { color:#087bb8; font-weight:600; }
+.wiki-content a.wiki-doc-path code { color:inherit; }
+.wiki-content main > h3 + ul li { margin:3px 0; }
+.wiki-all-pages h3.toc-group { font-size:14px; margin:12px 0 4px; color:#5b6670; }
+.wiki-all-pages p.toc-more { font-size:13px; color:#5b6670; margin:6px 0 0; }
+.wiki-side { color:#4e5961; }
+.wiki-side p { margin:7px 0 14px; line-height:1.4; }
+.wiki-side .related { margin:0; padding-left:18px; }
+.docs-wiki-nav { display:none; }
+@media (max-width:900px) {
+  .wiki-global { padding:0 18px; gap:16px; overflow-x:auto; }
+  .wiki-tools { padding:16px 18px; min-height:60px; }
+  .wiki-layout { display:block; margin:12px auto 32px; padding:0 18px; }
+  .wiki-toc, .wiki-side { position:static; margin:18px 0; }
+  .wiki-content { padding:28px 24px 38px; }
+}
+</style>
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js" integrity="sha384-o+g/BxPwhi0C3RK7oQBxQuNimeafQ3GE/ST4iT2BxVI4Wzt60SH4pq9iXVYujjaS" crossorigin="anonymous"></script>
+<script>document.addEventListener('DOMContentLoaded', async () => {
+  if (!window.mermaid) return;
+  window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
+  for (const code of document.querySelectorAll('pre > code.language-mermaid')) {
+    const original = code.parentElement;
+    const diagram = document.createElement('div');
+    diagram.className = 'mermaid';
+    diagram.textContent = code.textContent;
+    original.replaceWith(diagram);
+    try {
+      await window.mermaid.run({ nodes: [diagram] });
+    } catch {
+      diagram.replaceWith(original);
+    }
+  }
+});
+</script>
+</head>
+<body>
+<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-how-to" aria-current="true">하는 법</a><a href="../../index.html#sec-reference">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 하는 법</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#1-있는-것을-목록으로-만든다">1. 있는 것을 목록으로 만든다</a></li><li class="level-2"><a href="#2-어떤-문서가-무엇의-기준인지-정한다">2. 어떤 문서가 무엇의 기준인지 정한다</a></li><li class="level-2"><a href="#3-예전-문서를-agent가-읽는-곳에서-뺀다">3. 예전 문서를 agent가 읽는 곳에서 뺀다</a></li><li class="level-2"><a href="#4-설정-변경을-main에-넣는다">4. 설정 변경을 main에 넣는다</a></li><li class="level-2"><a href="#5-요구사항과-백로그를-만든다">5. 요구사항과 백로그를 만든다</a></li><li class="level-2"><a href="#6-기존-이력을-받는-기준선-작업을-둔다">6. 기존 이력을 받는 기준선 작업을 둔다</a></li><li class="level-2"><a href="#이럴-때는">이럴 때는</a></li></ul></aside><article class="page wiki-content">
+<header><h1 id="page-title">이미 있는 저장소에 팀 모드 들이기</h1></header>
+<main>
+<h1 id="이미-있는-저장소에-팀-모드-들이기">이미 있는 저장소에 팀 모드 들이기</h1>
+<blockquote class="reading-guide"><strong>읽기 안내</strong> — 누가: PM, 그리고 PM과 함께 저장소를 준비하는 FDE ·
+언제: commit 이력과 예전 기획 문서가 있는 저장소에서 NEXI 팀 모드를 시작할 때 ·
+읽은 뒤: 아래 순서대로 설정을 <code>main</code>에 넣고, 기존 이력을 받는 기준선 작업을 기능 작업보다 앞에 둔다.</blockquote>
+<p>이미 있는 저장소에는 키트가 만들지 않은 것이 셋 있다. 예전 commit, 예전 문서, 그리고 NEXI 설정을 넣는 변경이다. 이 셋을 정리하지
+않으면 agent가 예전 문서를 기준으로 삼거나, <a href="../start/07_FINISH.html">끝내기</a>가 멈춘다. 저장소를 받고 지금 코드를 돌려 보는
+일은 <a href="LEGACY_START.html">레거시 코드가 있는 저장소에서 시작하기</a> 2까지와 같다. 이 글은 그다음, 팀 모드로 정한 저장소에서 할 일이다.</p>
+<h2 id="1-있는-것을-목록으로-만든다">1. 있는 것을 목록으로 만든다</h2>
+<p>PM이 Claude Code에 이렇게 넣는다.</p>
+<pre><code class="language-text">이 저장소에서 다음을 찾아 표로 보여 줘. 아무것도 고치거나 옮기거나 닫지 마라.
+1. 문서: 요구사항, 기획, 설계, 회의록, 예전 계획처럼 사람이 쓴 문서. 경로와 첫 제목, 마지막 commit 날짜
+2. docs/requirements/, docs/contracts/, docs/evidence/, docs/reviews/, docs/design/, docs/screens/, docs/FINAL.md에 이미 있는 파일
+3. AGENTS.md, CLAUDE.md, 다른 agent의 규칙 파일(예: CuCu, Cursor, Copilot 설정)
+4. 라벨 task가 붙은 이슈, 병합되지 않은 branch와 열린 PR. 이름이 t와 숫자, req, final-로 시작하는 branch는 따로 표시해라
+5. main의 첫 부모 줄기에 있는 commit 수(git rev-list --first-parent --count origin/main)
+</code></pre>
+<p>표의 항목마다 남길지, 옮길지, 뺄지를 정한다. 2~4의 처리는 <a href="LEGACY_START.html">레거시 코드가 있는 저장소에서 시작하기</a>의 &quot;다른
+방식으로 진행하던 저장소라면&quot; 표를 따른다.</p>
+<h2 id="2-어떤-문서가-무엇의-기준인지-정한다">2. 어떤 문서가 무엇의 기준인지 정한다</h2>
+<p>팀 모드에서 기준이 되는 문서는 아래뿐이다. 예전 문서는 이 가운데 하나에 내용이 옮겨졌을 때만 기준이 된다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>무엇의 기준인가</th>
+<th>문서</th>
+<th>예전 문서를 쓰는 법</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>무엇을 만들고 바꾸는가</td>
+<td><code>docs/requirements/REQ-CONTEXT.md</code>(승인된 것)</td>
+<td>요구사항 원문(요청 파일)에 붙여 요구사항 분석에 넣는다. 결정은 REQ-CONTEXT에 적는다</td>
+</tr>
+<tr>
+<td>작업 하나의 범위와 확인</td>
+<td><code>docs/contracts/T&lt;N&gt;.md</code>(승인된 것)</td>
+<td>계약서가 직접 인용한 부분만 쓴다</td>
+</tr>
+<tr>
+<td>화면</td>
+<td><code>docs/design/BRIEF.md</code>(승인된 것)</td>
+<td>디자인 시스템 작업에서 BRIEF에 옮긴다</td>
+</tr>
+<tr>
+<td>agent가 따르는 규칙</td>
+<td><code>AGENTS.md</code>(<code>CLAUDE.md</code>는 이 파일을 가리키는 링크)</td>
+<td>다른 agent의 규칙 파일과 부딪히는 규칙은 PM이 하나로 정해 <code>AGENTS.md</code>에 둔다</td>
+</tr>
+<tr>
+<td>설치, build, 실행 방법</td>
+<td><a class="wiki-doc-path" href="README.html"><code>README.md</code></a>(골격 작업이 고친 것)</td>
+<td>골격 작업의 계약서가 옮길 명령을 정한다</td>
+</tr>
+<tr>
+<td>팀 구성원</td>
+<td><code>AGENTS.md</code>의 <code>PM:</code> 줄과 <code>## 팀</code> 표</td>
+<td>정보용이다. 권한은 <code>PM:</code> 줄만 정한다</td>
+</tr>
+</tbody></table></div>
+<h2 id="3-예전-문서를-agent가-읽는-곳에서-뺀다">3. 예전 문서를 agent가 읽는 곳에서 뺀다</h2>
+<p>agent는 저장소의 파일을 찾아 읽는다. 어느 파일이 기준인지 모르면 예전 문서도 기준으로 읽는다. 팀 모드를 시작한 저장소에서 CuCu가
+<code>docs/legacy/</code>의 예전 기획 문서를 읽고, 다른 작업의 PR에서 그 문서를 지운 일이 있었다.</p>
+<ol>
+<li>기준이 아닌 예전 문서는 <code>main</code>에서 뺀다. 지우는 commit은 아래 4의 설정 변경에 함께 넣는다. 지운 문서는 git 이력에 남고, 필요하면 <code>git show &lt;지우기 전 commit&gt;:&lt;경로&gt;</code>로 꺼낸다. 고객이 원본을 따로 보관하기를 원하면 저장소 밖의 정한 곳에 둔다.</li>
+<li>저장소에 꼭 남겨야 하면 한 폴더에 모으고, <code>AGENTS.md</code>에 이렇게 적는다. &quot;<code>&lt;폴더&gt;</code>는 참고 자료다. 요구사항, 작업 계약서, BRIEF가 그 파일을 가리킬 때만 읽는다. 그 폴더의 파일을 고치거나 지우지 않는다.&quot; 저장소 전체를 찾는 agent는 이 줄이 있어도 그 폴더를 읽을 수 있다. 그러니 1을 먼저 고른다.</li>
+</ol>
+<h2 id="4-설정-변경을-main에-넣는다">4. 설정 변경을 <code>main</code>에 넣는다</h2>
+<p><code>/nexi-init &lt;프로젝트 이름&gt; team</code>을 넣고, 이미 있던 <code>AGENTS.md</code>를 맞추는 일은 <a href="LEGACY_START.html">레거시 코드가 있는 저장소에서 시작하기</a>의
+3과 4를 따른다. 팀 모드에서는 <code>AGENTS.md</code>에 <code>Mode: team</code>, <code>PM:</code> 줄, 팀 규칙, <code>## 팀</code> 표가 들어가야 한다. 이 변경은 키트의 작업
+흐름 밖에서 들어가므로 저장소의 원래 절차(PR과 그 저장소의 검토자)로 넣는다. PM이 Claude Code에 이렇게 넣는다.</p>
+<pre><code class="language-text">nexi-setup branch로 설정 변경을 main에 넣어라. 먼저 지금 상태를 이 순서로 확인하고, 이미 된 단계는 다시 하지 마라.
+1. nexi-setup에서 main으로 병합된 PR이 있으면(gh pr list --head nexi-setup --state merged) 아무것도 만들지 말고 그 병합 commit의 전체 해시를 보여 주고 멈춘다. 병합 뒤 branch가 지워졌어도 이것으로 찾는다.
+2. 열린 PR이 있으면 그 PR을 쓴다.
+3. origin에 nexi-setup branch가 있으면 새로 만들지 말고 그 branch를 이어 쓴다.
+4. 로컬에만 nexi-setup branch가 있으면 그 commit을 보여 주고, 설정 변경만 들어 있으면 push한다. 다른 것이 들어 있으면 멈추고 나에게 물어라.
+5. 어느 것도 없으면 origin/main에서 nexi-setup branch를 만들어, nexi-init이 만든 파일, 고친 AGENTS.md와 CLAUDE.md, 3에서 정한 문서 정리만 commit하고 push한다.
+열린 PR이 없으면 main으로 가는 PR을 연다. branch 이름에 t와 숫자, req, final-을 쓰지 마라. 키트가 쓰는 이름이다.
+PR 번호와 head commit의 전체 해시를 보여 줘.
+</code></pre>
+<p>저장소의 검토자가 PR을 병합하면 다시 넣는다.</p>
+<pre><code class="language-text">nexi-setup PR의 병합 commit 전체 해시를 보여 주고, main으로 돌아와 GitHub의 최신 main을 받아라. commit하지 않은 파일이 남아 있지 않은지 보여 줘.
+</code></pre>
+<p>중간에 멈췄으면 같은 프롬프트를 다시 넣는다. branch와 PR이 이미 있으면 이어 쓰므로 결과는 같다. 이 병합 commit의 해시를 아래 6에서 쓴다.
+<code>PM:</code> 줄이 <code>main</code>에 들어간 뒤부터 승인과 병합 같은 PM만 하는 일이 동작한다.</p>
+<h2 id="5-요구사항과-백로그를-만든다">5. 요구사항과 백로그를 만든다</h2>
+<p><a href="../start/02_REQUIREMENTS.html">요구사항</a>과 <a href="../start/03_BACKLOG.html">백로그</a>대로 한다. 백로그 메모는 <a href="LEGACY_START.html">레거시 코드가 있는 저장소에서
+시작하기</a>의 6과 같고, 아래 6의 기준선 작업을 더한다.</p>
+<h2 id="6-기존-이력을-받는-기준선-작업을-둔다">6. 기존 이력을 받는 기준선 작업을 둔다</h2>
+<p>끝내기(<code>/nexi-finish</code>)는 <code>main</code>의 첫 부모 줄기에 있는 commit을 하나씩 본다. 키트가 만든 commit(첫 설정 commit, <code>req</code> PR로 들어간
+요구사항, 수용된 작업의 병합, 최종 보고서)이 아니면 멈춘다. 예전 commit과 4의 설정 병합 commit은 키트가 만들지 않았다. 설정 PR도
+예외가 아니다. 이런 commit은 수용된 작업이 검토했다고 적은 것만 통과한다. 그 작업의 이슈 본문과, 리뷰를 받은 그 작업 계약서에 같은 줄이
+있어야 한다. 줄은 commit 하나를 적는 <code>검토한 외부 commit: &lt;전체 해시&gt;</code>와, 범위를 적는 줄 두 가지다.</p>
+<pre><code class="language-text">검토한 외부 commit 범위: 끝 &lt;B&gt; · 시작 &lt;A&gt; · &lt;개수&gt;개
+</code></pre>
+<p>범위 줄은 <code>git rev-list --first-parent &lt;B&gt;</code>에서 B부터 A까지(둘 다 포함)의 commit을 뜻한다. A가 그 안에 없거나 개수가 다르면 아무것도
+풀지 않는다. git의 <code>A..B</code>와 달리 A도 들어간다.</p>
+<p>그래서 백로그를 만들 때 기준선 작업을 하나 둔다. 백로그의 첫 작업은 골격 작업, 둘째는 코드 표준 작업이고, 화면이 있는 제품이면 셋째는 디자인 시스템 작업이다. 기준선 작업은 그다음, 기능 작업보다 앞에 둔다. <code>/nexi-backlog</code> 메모에 이렇게 더한다(<code>&lt;설정 병합 commit&gt;</code>은 4에서 받은
+전체 해시다).</p>
+<pre><code class="language-text">코드 표준 작업(화면이 있으면 디자인 시스템 작업까지) 다음, 기능 작업보다 앞에 &quot;기존 이력을 기준선으로 받기&quot; 작업을 만들어라. 이 작업은 골격 작업이 만든 것만 쓰므로 선행 작업은 골격 작업이다. 이슈 본문 끝에 아래 명령의 출력 한 줄을 그대로 붙여라.
+B=&lt;설정 병합 commit&gt;; A=$(git rev-list --first-parent --max-parents=0 &quot;$B&quot;) &amp;&amp; C=$(git rev-list --first-parent --count &quot;$B&quot;) &amp;&amp; [ ${#A} = 40 ] &amp;&amp; printf &#39;검토한 외부 commit 범위: 끝 %s · 시작 %s · %s개\n&#39; &quot;$B&quot; &quot;$A&quot; &quot;$C&quot;
+이 작업의 산출물은 docs/BASELINE.md 하나다. 그 파일에 &quot;설정 병합 commit: &lt;전체 해시&gt;&quot; 줄, 이슈 본문과 같은 범위 줄, 요청 파일의 실행 기록에 있는 설치·build·test 결과 표, 그리고 &quot;이 commit들의 코드는 고치지 않고 지금 그대로를 시작점으로 받는다&quot;를 적는다. 코드는 고치지 않는다.
+</code></pre>
+<p>기준선 작업은 보통 작업과 같은 순서로 간다. 작업 계약서는 같은 범위 줄을 적고, 그 범위의 commit 전체를 고치지 않고 시작점으로 받는다고
+적는다. 새 검사는 범위 줄을 다른 기준과 맞춰 본다. 계약서에 그대로 넣을 수 있는 명령이다(<code>&lt;N&gt;</code>은 이 작업 번호).</p>
+<pre><code class="language-sh">f=docs/BASELINE.md; s=$(sed -n &#39;s/^설정 병합 commit: //p&#39; &quot;$f&quot;) &amp;&amp; l=$(grep &#39;^검토한 외부 commit 범위: &#39; &quot;$f&quot;) &amp;&amp;
+p=$(gh pr list --head nexi-setup --state merged --json mergeCommit --jq &#39;.[0].mergeCommit.oid&#39;) &amp;&amp;
+a=$(git rev-list --first-parent --max-parents=0 &quot;$s&quot;) &amp;&amp; n=$(git rev-list --first-parent --count &quot;$s&quot;) &amp;&amp;
+[ ${#s} = 40 ] &amp;&amp; [ &quot;$s&quot; = &quot;$p&quot; ] &amp;&amp; [ ${#a} = 40 ] &amp;&amp; [ &quot;$n&quot; -gt 0 ] &amp;&amp;
+[ &quot;$l&quot; = &quot;$(grep &#39;^검토한 외부 commit 범위: &#39; docs/contracts/T&lt;N&gt;.md)&quot; ] &amp;&amp; [ &quot;$l&quot; = &quot;검토한 외부 commit 범위: 끝 $s · 시작 $a · ${n}개&quot; ]
+</code></pre>
+<p>설정 병합 commit은 설정 PR의 병합 commit과 같아야 하고, 범위 줄은 그 commit에서 첫 부모 줄기의 첫 commit까지 전부여야 한다. 파일이
+없거나, <code>git</code>이나 <code>gh</code>가 실패하면(예: 설정 병합 commit이 이 폴더에 없다) 실패하고, 쓴 뒤 통과한다. 검토자는 범위가 설정 병합 commit에서 끝나는지 본다. PM이 병합하고 수용하면 그 범위의 commit은 끝내기에서
+통과한다.</p>
+<ul>
+<li>팀 모드를 시작한 뒤에도 누가 <code>main</code>에 직접 push하거나 키트 밖의 PR을 병합하면, 그 commit은 범위 밖이라 끝내기에서 멈춘다. 그때마다 PM이 같은 방식의 작업을 하나 더 만들어 그 commit을 검토하고, 남길지 되돌릴지 정한다. 한 개면 <code>검토한 외부 commit:</code> 줄로 적는다.</li>
+<li>수용한 뒤에 이슈 본문이나 <code>main</code>의 계약서를 고쳐 범위를 넓혀도, 끝내기는 리뷰를 받은 계약서의 줄만 센다.</li>
+</ul>
+<h2 id="이럴-때는">이럴 때는</h2>
+<ul>
+<li>설정 PR이 병합되기 전에 백로그를 만들었다. 기준선 작업의 범위가 설정 병합 commit에서 끝나지 않는다. 그 작업이 아직 수용되지 않았으면 PM이 위 명령으로 범위 줄을 다시 만들어 이슈 본문의 줄을 바꾼다(<code>gh issue edit &lt;N&gt; --body-file &lt;파일&gt;</code>). 작업 계약서가 이미 있으면 PM이 그 이슈에 &quot;계약서 수정 요청: 검토한 외부 commit 범위를 이슈 본문의 새 범위 줄로 바꾼다&quot; 댓글을 남긴다. 담당 FDE가 <code>/nexi-contract &lt;N&gt;</code>으로 계약서를 다시 쓰고, PM이 다시 승인한다. 이미 승인된 계약서도 승인 뒤의 수정 요청 댓글이 있으면 다시 쓴다.</li>
+<li>끝내기가 &quot;키트를 거치지 않은 commit&quot;으로 멈췄다. 멈춘 목록의 commit마다 위 6과 같은 작업을 만든다. 이미 수용한 작업의 이슈에 줄만 더하지 않는다. 그 작업의 계약서와 리뷰가 그 commit을 본 적이 없기 때문이다.</li>
+</ul>
+
+</main>
+</article><aside class="wiki-side" aria-label="이 칸"><h2>이 칸</h2><ul class="related"><li><a href="../../index.html#sec-how-to">하는 법 목록</a></li><li><a href="../../index.html">문서 홈</a></li></ul></aside></div>
+</body>
+</html>

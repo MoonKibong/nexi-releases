@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEXI 산출물 참조</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; color: #1f2933; line-height: 1.7; }
+h1, h2, h3 { line-height: 1.3; }
+a { color: #155e75; }
+pre { padding: 16px; overflow-x: auto; background: #0f172a; color: #e5e7eb; border-radius: 6px; }
+code { font-family: ui-monospace, monospace; font-size: .9em; }
+pre code { white-space: pre; }
+blockquote { margin: 16px 0; padding: 8px 16px; border-left: 4px solid #1793d1; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 12px; border: 1px solid #d7dde5; text-align: left; vertical-align: top; }
+th { background: #eef4f7; }
+.mermaid { overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+@media (max-width: 760px) { body { font-size: 15px; } table { min-width: 620px; } }
+</style>
+<style id="practice-wiki-shell">
+.wiki-content ol + pre, .wiki-content ol + .table-scroll { margin-left:2.2em; }
+.wiki-content blockquote.wiki-alert { border-left:4px solid #1793d1; background:#eef6fb; color:#1f2933; padding:10px 14px; margin:16px 0; }
+.wiki-content blockquote.wiki-alert .wiki-alert-title { display:block; font-weight:700; margin-bottom:4px; }
+.wiki-content blockquote.wiki-alert-tip { border-left-color:#1a7f37; background:#eef8f0; }
+.wiki-content blockquote.wiki-alert-important { border-left-color:#8250df; background:#f5f0fd; }
+.wiki-content blockquote.wiki-alert-warning { border-left-color:#bf8700; background:#fff8e5; }
+.wiki-content blockquote.reading-guide { border-left:4px solid #1793d1; background:#eef6fb; color:#45525e; font-size:14px; line-height:1.6; padding:8px 14px; margin:0 0 22px; }
+body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+.page { max-width:none; width:100%; margin:0; padding:0; border:0; box-shadow:none; background:transparent; }
+.page > header { display:none; }
+.wiki-global { height:48px; background:#2e2e2e; border-bottom:5px solid #1793d1; color:#fff; display:flex; align-items:center; padding:0 calc((100% - 1840px)/2 + 42px); gap:28px; }
+.wiki-global strong { color:#fff; font-size:15px; letter-spacing:.02em; white-space:nowrap; }
+.wiki-global a { color:#d8d8d8; text-decoration:none; font-size:14px; font-weight:700; }
+.wiki-global a:hover, .wiki-global a:focus, .wiki-global a[aria-current] { color:#fff; text-decoration:underline; }
+.wiki-tools { max-width:1840px; margin:auto; min-height:76px; padding:18px 42px; display:flex; align-items:center; gap:18px; }
+.wiki-tools .crumb { color:#5b6770; font-size:14px; }
+.wiki-tools .home-link { margin-left:auto; color:#087bb8; font-weight:700; text-decoration:none; }
+.audience-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; }
+.audience-internal { background:#5d4037; color:#fff; }
+.audience-client { background:#156f3c; color:#fff; }
+.audience-unspecified { background:#e7ebee; color:#46525a; }
+.asset-badges { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; }
+.asset-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; background:#e9eff4; color:#25465c; }
+.asset-badge.status-reviewed { background:#156f3c; color:#fff; }
+.asset-badge.status-candidate { background:#755b16; color:#fff; }
+.wiki-all-pages { margin-top:46px; padding-top:18px; border-top:2px solid #aeb8c1; }
+.wiki-all-pages details { margin:8px 0; }
+.wiki-all-pages summary { cursor:pointer; color:#087bb8; font-weight:700; }
+.wiki-all-pages ul { margin:7px 0 14px; }
+.wiki-layout { max-width:1840px; margin:28px auto 52px; padding:0 42px; display:grid; grid-template-columns:250px minmax(0, 1fr) 230px; gap:34px; align-items:start; }
+.wiki-toc, .wiki-side { font-size:14px; position:sticky; top:20px; }
+.wiki-toc h2, .wiki-side h2 { font-size:16px; margin:0 0 10px; padding:0 0 9px; border-bottom:1px solid #c8d0d7; }
+.wiki-toc ul { list-style:none; margin:0; padding:0; }
+.wiki-toc li { margin:0; padding:5px 0; line-height:1.35; }
+.wiki-toc li.level-3 { padding-left:16px; font-size:13px; }
+.wiki-toc a, .wiki-side a { color:#087bb8; text-decoration:none; }
+.wiki-toc a:hover, .wiki-side a:hover { text-decoration:underline; }
+.wiki-content { min-width:0; background:#fff; border:1px solid #cbd3da; padding:38px 44px 56px; }
+.wiki-content main > h1:first-child { margin-top:0; font-size:38px; border-bottom:2px solid #aeb8c1; padding-bottom:12px; }
+.wiki-content h2 { border-bottom:1px solid #aeb8c1; font-size:28px; margin-top:38px; }
+.wiki-content h3 { font-size:20px; }
+.wiki-content a { color:#087bb8; font-weight:600; }
+.wiki-content a.wiki-doc-path code { color:inherit; }
+.wiki-content main > h3 + ul li { margin:3px 0; }
+.wiki-all-pages h3.toc-group { font-size:14px; margin:12px 0 4px; color:#5b6670; }
+.wiki-all-pages p.toc-more { font-size:13px; color:#5b6670; margin:6px 0 0; }
+.wiki-side { color:#4e5961; }
+.wiki-side p { margin:7px 0 14px; line-height:1.4; }
+.wiki-side .related { margin:0; padding-left:18px; }
+.docs-wiki-nav { display:none; }
+@media (max-width:900px) {
+  .wiki-global { padding:0 18px; gap:16px; overflow-x:auto; }
+  .wiki-tools { padding:16px 18px; min-height:60px; }
+  .wiki-layout { display:block; margin:12px auto 32px; padding:0 18px; }
+  .wiki-toc, .wiki-side { position:static; margin:18px 0; }
+  .wiki-content { padding:28px 24px 38px; }
+}
+</style>
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js" integrity="sha384-o+g/BxPwhi0C3RK7oQBxQuNimeafQ3GE/ST4iT2BxVI4Wzt60SH4pq9iXVYujjaS" crossorigin="anonymous"></script>
+<script>document.addEventListener('DOMContentLoaded', async () => {
+  if (!window.mermaid) return;
+  window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
+  for (const code of document.querySelectorAll('pre > code.language-mermaid')) {
+    const original = code.parentElement;
+    const diagram = document.createElement('div');
+    diagram.className = 'mermaid';
+    diagram.textContent = code.textContent;
+    original.replaceWith(diagram);
+    try {
+      await window.mermaid.run({ nodes: [diagram] });
+    } catch {
+      diagram.replaceWith(original);
+    }
+  }
+});
+</script>
+</head>
+<body>
+<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#저장소의-파일">저장소의 파일</a></li><li class="level-2"><a href="#github-이슈의-줄">GitHub 이슈의 줄</a></li><li class="level-2"><a href="#skill이-남기는-이슈-댓글">skill이 남기는 이슈 댓글</a></li></ul></aside><article class="page wiki-content">
+<header><h1 id="page-title">NEXI 산출물 참조</h1></header>
+<main>
+<h1 id="nexi-산출물-참조">NEXI 산출물 참조</h1>
+<blockquote class="reading-guide"><strong>읽기 안내</strong> — 누가: NEXI 키트로 프로젝트를 하는 사람 ·
+언제: skill이 만든 파일이나 이슈 줄을 읽거나 검토할 때 ·
+읽은 뒤: 각 파일이 무엇을 담아야 하는지 알고, 빠지거나 틀린 곳을 AI에게 고치라고 한다.</blockquote>
+<p>NEXI 프로젝트에서 남는 것은 저장소의 파일, GitHub 이슈 본문의 줄, 이슈 댓글이다. 파일은 <code>nexi-init</code>이 만든 폴더에 각 skill이 쓴다. 정확한 형식은 각 skill의 원문(<a href="SKILLS.html">skill 참조</a>)이 정한다.</p>
+<h2 id="저장소의-파일">저장소의 파일</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>파일</th>
+<th>쓰는 skill</th>
+<th>담는 것</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>AGENTS.md</code>(<code>CLAUDE.md</code>는 링크)</td>
+<td><code>nexi-init</code></td>
+<td>프로젝트 한 줄 설명, <code>Mode: solo</code> 또는 <code>Mode: team</code>, 팀이면 <code>PM: &lt;GitHub 아이디&gt;</code>, 명령(<code>make build</code>, <code>make test</code>, <code>make lint</code>, <code>make screenshots T=&lt;N&gt;</code>), 문서 위치, 작업 규칙 여섯 개, 팀이면 팀 규칙 세 개. Codex는 <code>AGENTS.md</code>를, Claude Code는 <code>CLAUDE.md</code>를 읽는다</td>
+</tr>
+<tr>
+<td><code>docs/requirements/REQUEST.md</code></td>
+<td><code>nexi-init</code></td>
+<td>고객의 요구사항 원문 그대로. 다시 쓰지 않는다</td>
+</tr>
+<tr>
+<td><code>docs/requirements/REQ-ANALYSIS.md</code></td>
+<td><code>nexi-requirements analyze</code></td>
+<td>모듈과 기능, 데이터와 관계, 업무 규칙, 화면과 사용자의 일, 품질 요구(원문에 없으면 &quot;원문에 품질 요구 없음&quot; 한 줄), 스택과 제약, 모호한 점. 항목마다 원문의 문장을 인용한다</td>
+</tr>
+<tr>
+<td><code>docs/requirements/QUESTIONS.md</code></td>
+<td><code>nexi-requirements analyze</code></td>
+<td>한 줄에 질문 하나와 원문 위치. 구현이나 검증을 막는 것만</td>
+</tr>
+<tr>
+<td><code>docs/requirements/CLIENT_ANSWERS.md</code></td>
+<td><code>nexi-requirements answers</code></td>
+<td><code>질문</code>, <code>답</code>, <code>근거</code> 표. 근거는 <code>고객</code>, <code>원문</code>, <code>수행사 결정</code> 중 하나</td>
+</tr>
+<tr>
+<td><code>docs/requirements/REQ-CONTEXT.md</code></td>
+<td><code>nexi-requirements decide</code>, <code>approve</code></td>
+<td>맨 위 <code>상태: 초안</code> 또는 <code>상태: 승인</code>. 결정마다 번호(<code>D1</code>…), 원문 → 질문과 답 → 결정의 흐름, 출처(<code>원문</code>, <code>고객</code>, <code>수행사</code>). 품질 요구마다 요구 수준과 확인 방법. 스택 결정에 런타임과 패키지 관리자. 끝에 수행사가 고객 없이 정한 결정과 아직 답이 없는 질문. 승인할 때 결정마다 승인 상태(<code>받아들임</code>, <code>받아들이지 않음</code>, <code>고객 확인 필요</code>, <code>보류</code>)와 &quot;고객 확인이 남은 결정&quot; 목록이 더해지고, 받아들이지 않은 결정에서만 나온 규칙은 빠진다. 구현 패턴의 적용 전 결정은 적용 범위와 함께 결정이 된다. 패턴 예외 결정은 <code>패턴 예외: &lt;패턴&gt; · 조건 &lt;번호&gt;</code>로 시작하고 패턴 판, 조건 문장, 고객 요구, 위험, 대신 하는 동작, 적용 범위, 고객 결정(이름, 날짜)을 가진다. <code>[보안]</code> 조건이면 보안·데이터 담당자(이름, 날짜)도 가진다. <code>## 패턴 결정</code> 표에 해당할 수 있는 패턴의 적용 전 결정 항목마다 한 줄(패턴, 판, 항목, 결정, 세부)이 있다. 고객이 미룬 값은 제목이 <code>보류:</code>로 시작하는 결정(필요한 때, 정할 사람, 미룬 이유)이고 승인 상태가 <code>보류</code>다. 표와 결정의 형식은 키트의 <code>nexi-req-check.sh</code>가 검사한다(<a href="CONCEPTS.html#%EA%B2%B0%EC%A0%95%EC%9D%98-%EC%8A%B9%EC%9D%B8-%EC%83%81%ED%83%9C">결정의 승인 상태</a>)</td>
+</tr>
+<tr>
+<td><code>docs/engineering/STANDARDS.md</code></td>
+<td>코드 표준 작업(<code>nexi-contract</code>, <code>nexi-implement</code>)</td>
+<td>코드 표준. 절은 적용 범위, 패키지와 가시성, 의존 방향, 공용 코드, 로깅, 문서 주석, 예외 목록. 규칙마다 지키는 예 하나와, <code>make lint</code>의 검사 이름이나 &quot;리뷰가 본다&quot;</td>
+</tr>
+<tr>
+<td><code>docs/contracts/T&lt;N&gt;.md</code></td>
+<td><code>nexi-contract</code></td>
+<td>작업 계약서. 맨 위 <code>상태: 초안</code> 또는 <code>상태: 승인</code>과 <code>요구사항: &lt;REQ-CONTEXT의 git hash-object&gt;</code>. 산출물 하나, 수용 기준(기준마다 확인 방법), 검증 명령(새 검사마다 실행 명령과 구현 전에 실패해야 할 구체적인 확인 조건, 회귀 검사, 준비 명령), 정해진 요구 네 가지의 해당 여부, 하지 않을 일, <code>## 적용 패턴</code>(패턴마다 판, <code>적용</code> 또는 <code>해당 없음</code>, 근거. <code>적용</code>이면 조건마다 수용 기준, <code>해당 없음</code>과 이유, 예외 가운데 하나와 적용 전 결정의 값과 결정 번호. 패턴 전체가 <code>해당 없음</code>이면 판, 이유, 근거만), 화면 작업이면 화면. 변경 작업과 나눈 작업, 골격 작업은 <a href="SKILLS.html#nexi-contract">skill 참조</a>의 추가 항목을 담는다. <code>## 표준 예외</code>(표준과 다르게 하는 곳: 규칙, 이유, 대신 하는 동작, 범위, 정한 사람)와 <code>## 넘기는 일</code>(받는 이슈와 한 줄)을 가진다.</td>
+</tr>
+<tr>
+<td><code>docs/design/BRIEF.md</code></td>
+<td><code>nexi-design</code></td>
+<td>디자인 기준. 맨 위 <code>상태: 초안</code> 또는 <code>상태: 승인</code>. 방향, 토큰(색 역할, 글자, 간격, 모서리, 그림자, 대비 4.5:1 이상), 구성 요소와 상태, 배치와 중단점, 날짜·금액 형식, 화면별 상태, 스크린샷에서 대조할 항목. 근거 없는 값은 <code>(제안)</code></td>
+</tr>
+<tr>
+<td><code>docs/evidence/T&lt;N&gt;.md</code></td>
+<td><code>nexi-implement</code></td>
+<td>증거. 구현 중에는 맨 위에 <code>상태: 작성 중</code>이 있고, 증거를 완성하면 이 줄을 지운다. 검사한 상태(혼자 하면 코드 지문, 팀이면 검사한 commit), 기준 commit(혼자 하면 <code>HEAD</code>, 팀이면 <code>origin/main</code>), <code>implemented by:</code>(구현한 CLI와 모델), 환경(OS, 런타임과 패키지 관리자 버전), 수용 기준마다 검사와 종류(<code>new</code>면 실패한 명령, 종료코드, 실패한 확인 내용, <code>regression</code>이면 기준 실행과 이유), 마지막 수정 뒤 통과 결과, 찍은 PNG와 그때의 상태. 이슈의 <code>넘겨받는 일:</code> 댓글을 그대로 옮기고 그 일을 덮는 수용 기준을 함께 적은 <code>## 넘겨받는 일</code>도 있다. 댓글이 없으면 <code>없음</code>이다.</td>
+</tr>
+<tr>
+<td><code>docs/screens/T&lt;N&gt;/</code></td>
+<td><code>nexi-implement</code>(<code>make screenshots</code>)</td>
+<td>화면 작업의 스크린샷 PNG</td>
+</tr>
+<tr>
+<td><code>docs/reviews/T&lt;N&gt;.md</code></td>
+<td><code>nexi-review record</code>, <code>nexi-merge</code></td>
+<td>판정 기록. 판정을 받은 그대로 날짜와 함께 차례로 덧붙인다. 이전 판정은 고치지 않는다. 판정 하나의 형식은 판정 형식: 첫 줄 <code>APPROVE</code>·<code>REVISE</code>·<code>BLOCK</code>, 작업 번호, 혼자인지 팀인지, 리뷰한 commit과 기준 commit(base), 혼자 하면 두 지문, <code>reviewer:</code>, 기준별 판단, PNG별 대조, 사유</td>
+</tr>
+<tr>
+<td><code>docs/FINAL.md</code></td>
+<td><code>nexi-finish</code></td>
+<td>최종 보고. 맨 위 <code>상태: 초안</code> 또는 <code>상태: 승인</code>. 날짜와 시험한 <code>main</code> commit, 새 사본과 이 폴더의 결과표(사용한 버전 포함), <code>## 앱</code>(주소, 띄운 프로세스, 명령 또는 띄우지 않은 이유), 수용된 작업과 수용되지 않고 닫힌 작업, 고객 확인이 남은 결정, <code>## 패턴 예외</code>(수용된 작업이 쓴 예외와 그 계약서가 따른 판의 결정, 지금의 패턴 예외 결정과 쓰는 작업, 쓰이지 않은 예외), 역할별 seed 계정, 사람이 채울 확인 목록. <code>## 표준 점검</code>(코드 표준과 어긋난 곳, 예외, <code>없음</code>이나 <code>점검할 표준 없음</code>)과 <code>## 넘긴 일</code>(넘긴 일마다 <code>받음</code>, <code>남음</code>, <code>확인할 수 없음</code>, 또는 <code>없음</code>)도 있다.</td>
+</tr>
+<tr>
+<td><code>scripts/nexi-fingerprint.sh</code></td>
+<td><code>nexi-init</code>, <code>nexi-implement</code></td>
+<td>지문 스크립트. 키트의 원본과 같아야 한다</td>
+</tr>
+<tr>
+<td><code>scripts/nexi-isolated.sh</code></td>
+<td><code>nexi-init</code>, <code>nexi-implement</code></td>
+<td>빈 환경 실행기. 명령 하나를 호출한 셸의 설정 없이 돌린다. 데이터베이스를 준비하는 검사와 깨끗한 사본의 단계가 쓴다. 키트의 원본과 같아야 한다</td>
+</tr>
+<tr>
+<td><code>scripts/nexi-clean-copy.sh</code></td>
+<td><code>nexi-init</code>, <code>nexi-implement</code></td>
+<td>깨끗한 사본 검사. 이 저장소의 사본을 임시 폴더에 만들고 <code>scripts/nexi-clean-copy.steps</code>의 단계를 하나씩 실행기로 돌린 뒤 사본이 그대로인지 본다. 키트의 원본과 같아야 한다</td>
+</tr>
+<tr>
+<td><code>scripts/nexi-clean-copy.steps</code></td>
+<td><code>nexi-init</code>, 골격 작업</td>
+<td>README의 단계를 README의 순서대로 한 줄에 명령 하나씩. <code>#</code>로 시작하는 줄과 빈 줄은 건너뛴다. 줄 사이에 <code>cd</code>나 <code>export</code>는 이어지지 않는다</td>
+</tr>
+</tbody></table></div>
+<p>&quot;상태&quot; 줄의 뜻은 <a href="CONCEPTS.html#%EC%83%81%ED%83%9C-%EC%A4%84">개념 참조</a>에 있다.</p>
+<h2 id="github-이슈의-줄">GitHub 이슈의 줄</h2>
+<p>작업 이슈(라벨 <code>task</code>) 본문에서 skill이 읽는 줄이다. 한 줄에 하나씩, 정해진 글자 그대로 쓴다. <code>선행 작업:</code> 줄은 나중에 단 댓글로
+바꿀 수 있다. 본문과 댓글이 다르면 가장 나중의 줄을 따른다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>줄</th>
+<th>쓰는 skill</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>선행 작업: #&lt;a&gt;, #&lt;b&gt;</code> 또는 <code>선행 작업: 없음</code></td>
+<td><code>nexi-backlog</code>, <code>split</code>, <code>change</code></td>
+<td>이 작업을 시작하기 전에 <code>main</code>에 수용돼야 하는 이슈. <code>next</code>는 이 줄이 없는 이슈를 고르지 않는다</td>
+</tr>
+<tr>
+<td><code>나눔 출처: #&lt;N&gt;</code></td>
+<td><code>nexi-backlog split</code></td>
+<td>이 이슈가 #&lt;N&gt;을 나눠 생겼다. 이어받는 것은 없고 <code>main</code>에서 새로 구현한다</td>
+</tr>
+<tr>
+<td><code>변경 대상: T#&lt;N&gt;</code></td>
+<td><code>nexi-backlog change</code></td>
+<td>이 이슈가 끝난 작업 T#&lt;N&gt;을 바꾸는 변경 작업이다</td>
+</tr>
+<tr>
+<td><code>배포됨: 계약서에 배포 후 확인과 되돌리기 방법을 넣는다</code></td>
+<td><code>nexi-backlog change</code></td>
+<td>바꿀 작업이 이미 배포됐다</td>
+</tr>
+<tr>
+<td><code>결함 출처: nexi-finish &lt;commit&gt;</code></td>
+<td><code>nexi-finish reject</code></td>
+<td>최종 확인에서 찾은 결함으로 만든 이슈</td>
+</tr>
+</tbody></table></div>
+<h2 id="skill이-남기는-이슈-댓글">skill이 남기는 이슈 댓글</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>댓글</th>
+<th>남기는 skill</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>NEXI 수용: &lt;commit&gt; · reviewed files &lt;지문&gt;</code>(혼자)</td>
+<td><code>nexi-merge</code></td>
+<td>이 작업이 수용됐다. 수용 조건은 이 commit으로 검사한다</td>
+</tr>
+<tr>
+<td><code>NEXI 수용: merge commit &lt;M&gt; · reviewed commit &lt;R&gt; · base &lt;B&gt;</code>(팀)</td>
+<td><code>nexi-merge</code></td>
+<td>같다</td>
+</tr>
+<tr>
+<td><code>나눔: #&lt;새 번호&gt; · 저장 &lt;위치&gt; · …</code></td>
+<td><code>nexi-backlog split</code></td>
+<td>이 이슈를 나눴다. 수용된 것이 아니다</td>
+</tr>
+<tr>
+<td>차례 댓글(예: <code>계약서 초안 — PM 승인 차례 &lt;해시&gt;</code>)</td>
+<td>팀일 때 각 skill</td>
+<td>다음 차례와 그때의 commit. 같은 해시의 댓글이 있으면 다시 달지 않는다</td>
+</tr>
+</tbody></table></div>
+
+</main>
+</article><aside class="wiki-side" aria-label="이 칸"><h2>이 칸</h2><ul class="related"><li><a href="../../index.html#sec-reference">참조 목록</a></li><li><a href="../../index.html">문서 홈</a></li></ul></aside></div>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>인증과 로그인 세션</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; color: #1f2933; line-height: 1.7; }
+h1, h2, h3 { line-height: 1.3; }
+a { color: #155e75; }
+pre { padding: 16px; overflow-x: auto; background: #0f172a; color: #e5e7eb; border-radius: 6px; }
+code { font-family: ui-monospace, monospace; font-size: .9em; }
+pre code { white-space: pre; }
+blockquote { margin: 16px 0; padding: 8px 16px; border-left: 4px solid #1793d1; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 12px; border: 1px solid #d7dde5; text-align: left; vertical-align: top; }
+th { background: #eef4f7; }
+.mermaid { overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+@media (max-width: 760px) { body { font-size: 15px; } table { min-width: 620px; } }
+</style>
+<style id="practice-wiki-shell">
+.wiki-content ol + pre, .wiki-content ol + .table-scroll { margin-left:2.2em; }
+.wiki-content blockquote.wiki-alert { border-left:4px solid #1793d1; background:#eef6fb; color:#1f2933; padding:10px 14px; margin:16px 0; }
+.wiki-content blockquote.wiki-alert .wiki-alert-title { display:block; font-weight:700; margin-bottom:4px; }
+.wiki-content blockquote.wiki-alert-tip { border-left-color:#1a7f37; background:#eef8f0; }
+.wiki-content blockquote.wiki-alert-important { border-left-color:#8250df; background:#f5f0fd; }
+.wiki-content blockquote.wiki-alert-warning { border-left-color:#bf8700; background:#fff8e5; }
+.wiki-content blockquote.reading-guide { border-left:4px solid #1793d1; background:#eef6fb; color:#45525e; font-size:14px; line-height:1.6; padding:8px 14px; margin:0 0 22px; }
+body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+.page { max-width:none; width:100%; margin:0; padding:0; border:0; box-shadow:none; background:transparent; }
+.page > header { display:none; }
+.wiki-global { height:48px; background:#2e2e2e; border-bottom:5px solid #1793d1; color:#fff; display:flex; align-items:center; padding:0 calc((100% - 1840px)/2 + 42px); gap:28px; }
+.wiki-global strong { color:#fff; font-size:15px; letter-spacing:.02em; white-space:nowrap; }
+.wiki-global a { color:#d8d8d8; text-decoration:none; font-size:14px; font-weight:700; }
+.wiki-global a:hover, .wiki-global a:focus, .wiki-global a[aria-current] { color:#fff; text-decoration:underline; }
+.wiki-tools { max-width:1840px; margin:auto; min-height:76px; padding:18px 42px; display:flex; align-items:center; gap:18px; }
+.wiki-tools .crumb { color:#5b6770; font-size:14px; }
+.wiki-tools .home-link { margin-left:auto; color:#087bb8; font-weight:700; text-decoration:none; }
+.audience-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; }
+.audience-internal { background:#5d4037; color:#fff; }
+.audience-client { background:#156f3c; color:#fff; }
+.audience-unspecified { background:#e7ebee; color:#46525a; }
+.asset-badges { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; }
+.asset-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; background:#e9eff4; color:#25465c; }
+.asset-badge.status-reviewed { background:#156f3c; color:#fff; }
+.asset-badge.status-candidate { background:#755b16; color:#fff; }
+.wiki-all-pages { margin-top:46px; padding-top:18px; border-top:2px solid #aeb8c1; }
+.wiki-all-pages details { margin:8px 0; }
+.wiki-all-pages summary { cursor:pointer; color:#087bb8; font-weight:700; }
+.wiki-all-pages ul { margin:7px 0 14px; }
+.wiki-layout { max-width:1840px; margin:28px auto 52px; padding:0 42px; display:grid; grid-template-columns:250px minmax(0, 1fr) 230px; gap:34px; align-items:start; }
+.wiki-toc, .wiki-side { font-size:14px; position:sticky; top:20px; }
+.wiki-toc h2, .wiki-side h2 { font-size:16px; margin:0 0 10px; padding:0 0 9px; border-bottom:1px solid #c8d0d7; }
+.wiki-toc ul { list-style:none; margin:0; padding:0; }
+.wiki-toc li { margin:0; padding:5px 0; line-height:1.35; }
+.wiki-toc li.level-3 { padding-left:16px; font-size:13px; }
+.wiki-toc a, .wiki-side a { color:#087bb8; text-decoration:none; }
+.wiki-toc a:hover, .wiki-side a:hover { text-decoration:underline; }
+.wiki-content { min-width:0; background:#fff; border:1px solid #cbd3da; padding:38px 44px 56px; }
+.wiki-content main > h1:first-child { margin-top:0; font-size:38px; border-bottom:2px solid #aeb8c1; padding-bottom:12px; }
+.wiki-content h2 { border-bottom:1px solid #aeb8c1; font-size:28px; margin-top:38px; }
+.wiki-content h3 { font-size:20px; }
+.wiki-content a { color:#087bb8; font-weight:600; }
+.wiki-content a.wiki-doc-path code { color:inherit; }
+.wiki-content main > h3 + ul li { margin:3px 0; }
+.wiki-all-pages h3.toc-group { font-size:14px; margin:12px 0 4px; color:#5b6670; }
+.wiki-all-pages p.toc-more { font-size:13px; color:#5b6670; margin:6px 0 0; }
+.wiki-side { color:#4e5961; }
+.wiki-side p { margin:7px 0 14px; line-height:1.4; }
+.wiki-side .related { margin:0; padding-left:18px; }
+.docs-wiki-nav { display:none; }
+@media (max-width:900px) {
+  .wiki-global { padding:0 18px; gap:16px; overflow-x:auto; }
+  .wiki-tools { padding:16px 18px; min-height:60px; }
+  .wiki-layout { display:block; margin:12px auto 32px; padding:0 18px; }
+  .wiki-toc, .wiki-side { position:static; margin:18px 0; }
+  .wiki-content { padding:28px 24px 38px; }
+}
+</style>
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js" integrity="sha384-o+g/BxPwhi0C3RK7oQBxQuNimeafQ3GE/ST4iT2BxVI4Wzt60SH4pq9iXVYujjaS" crossorigin="anonymous"></script>
+<script>document.addEventListener('DOMContentLoaded', async () => {
+  if (!window.mermaid) return;
+  window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
+  for (const code of document.querySelectorAll('pre > code.language-mermaid')) {
+    const original = code.parentElement;
+    const diagram = document.createElement('div');
+    diagram.className = 'mermaid';
+    diagram.textContent = code.textContent;
+    original.replaceWith(diagram);
+    try {
+      await window.mermaid.run({ nodes: [diagram] });
+    } catch {
+      diagram.replaceWith(original);
+    }
+  }
+});
+</script>
+</head>
+<body>
+<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#해결하는-문제">해결하는 문제</a></li><li class="level-2"><a href="#언제-사용하는가">언제 사용하는가</a></li><li class="level-2"><a href="#적용-전-결정">적용 전 결정</a></li><li class="level-2"><a href="#반드시-지킬-조건">반드시 지킬 조건</a></li><li class="level-2"><a href="#구현-절차">구현 절차</a></li><li class="level-2"><a href="#검증-계약">검증 계약</a></li><li class="level-2"><a href="#조건부-기술스택-프로필">조건부 기술스택 프로필</a></li><li class="level-2"><a href="#출처와-제한">출처와 제한</a></li></ul></aside><article class="page wiki-content"><div class="asset-badges"><span class="asset-badge">공통 계약</span><span class="asset-badge">문서 검토 완료</span><span class="asset-badge">technology-neutral</span></div>
+<header><h1 id="page-title">인증과 로그인 세션</h1></header>
+<main>
+<h1 id="인증과-로그인-세션">인증과 로그인 세션</h1>
+<blockquote class="reading-guide"><strong>읽기 안내</strong> — 누가: 작업 계약을 쓰는 개발자, FDE ·
+언제: <code>T#</code>에서 이 문제를 풀 방법을 정할 때 ·
+읽은 뒤: 적용 전 결정을 고객·기술 책임자와 정하고, 반드시 지킬 조건을 수용 기준과 테스트에 넣는다.</blockquote>
+<h2 id="해결하는-문제">해결하는 문제</h2>
+<p>요청을 보낸 사람이 누구인지 확인한다. 로그인한 뒤에도 같은 사용자인지 안전하게 판단한다.</p>
+<h2 id="언제-사용하는가">언제 사용하는가</h2>
+<p>사용자마다 다른 화면·데이터·권한이 있거나, 외부 IdP/SSO나 초대 기반 가입을 쓰는 서비스에 적용한다. 공개
+정보만 주는 API에는 로그인 세션을 억지로 넣지 않는다.</p>
+<h2 id="적용-전-결정">적용 전 결정</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>결정</th>
+<th>정할 내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>로그인 방식</td>
+<td>비밀번호, 기업 SSO, 초대, 또는 이들의 조합. SSO를 쓰면 OIDC와 SAML 중 무엇을 쓰는지</td>
+</tr>
+<tr>
+<td>세션 방식</td>
+<td>서버 세션, HttpOnly cookie에 담는 토큰, 플랫폼 IdP 토큰 중 하나. 서명 토큰이면 허용할 알고리즘, 신뢰할 키, 발급자·대상·용도 값</td>
+</tr>
+<tr>
+<td>세션 식별자 발급</td>
+<td>사용할 생성기와 난수부 엔트로피 기준</td>
+</tr>
+<tr>
+<td>만료·갱신</td>
+<td>유휴 만료와 절대 만료 시간, 갱신 조건. refresh token을 쓰면 회전·재사용 탐지 방식과 같은 token으로 동시에 갱신할 때의 정책</td>
+</tr>
+<tr>
+<td>로그아웃·철회 반영</td>
+<td>로컬 로그아웃, 서버 세션 폐기, refresh token 철회, 접근 토큰 만료, 권한 변경 반영 각각의 차단 대상과 무효화 방법, 최대 반영 시간과 이미 실행 중인 요청의 처리 경계</td>
+</tr>
+<tr>
+<td>가입 정책</td>
+<td>공개 가입, 관리자 초대, SSO 자동 가입 중 무엇을 허용하는지. 초대 토큰의 만료 시간</td>
+</tr>
+<tr>
+<td>비밀번호 보호</td>
+<td>비밀번호를 지원하면 저장 방식(해시 알고리즘과 설정), 로그인 실패 횟수 한도와 그 한도를 넘었을 때의 처리, 계정이 있는지 드러내지 않는 응답 형태</td>
+</tr>
+<tr>
+<td>HTTPS와 도메인</td>
+<td>cookie의 <code>Secure</code>, <code>HttpOnly</code>, <code>SameSite</code>, domain·path 정책</td>
+</tr>
+<tr>
+<td>CSRF 방어</td>
+<td>cookie 인증의 상태 변경 경로에 적용할 방어 방식과 허용 출처. SSO callback에 적용할 별도 프로토콜 검증</td>
+</tr>
+</tbody></table></div>
+<h2 id="반드시-지킬-조건">반드시 지킬 조건</h2>
+<ul>
+<li>[보안] 인증(authentication)과 권한 부여(authorization)를 나눈다. 로그인했다고 모든 기능을 쓸 수 있는 것은 아니다.</li>
+<li>[보안] 보호 대상인 모든 요청에서 서버가 선택한 인증 방식에 맞게 자격증명을 검증한다.<ul>
+<li>서버 세션은 서버가 발급한 식별자가 있는지, 만료되거나 폐기되지 않았는지 확인한다.</li>
+<li>서명 토큰은 허용한 알고리즘과 신뢰하는 키로 서명을 확인한다. 발급자·대상·만료·용도도 검증한다.</li>
+</ul>
+</li>
+<li>[보안] 세션 식별자는 암호학적으로 안전한 난수 생성기로 정한 엔트로피 기준에 맞게 발급해 예측하기 어렵게 한다. 로그인할 때와 권한이 올라갈 때 식별자를 바꾼다. 이전 식별자로는 올라간 권한을 쓸 수 없게 한다.</li>
+<li>[보안] 유휴 만료와 절대 만료는 서버가 집행한다.</li>
+<li>[보안] refresh token을 쓰면 회전과 재사용 탐지, 또는 그와 같은 수준의 탈취 대응을 둔다. 같은 refresh token으로 동시에 갱신할 때의 정책도 정해서 따른다.</li>
+<li>로컬 로그아웃, 서버 세션 폐기, refresh token 철회, 접근 토큰 만료, 권한 변경 반영을 서로 다른 동작으로 다룬다. 동작마다 최대 반영 시간과 이미 실행 중인 요청을 어디까지 처리할지 정한다.</li>
+<li>자체 검증 토큰은 철회를 따로 확인하는 수단이 없으면 만료 전까지 유효할 수 있다. 이 한계를 <a href="../reference/ARTIFACTS.html#%EC%A0%80%EC%9E%A5%EC%86%8C%EC%9D%98-%ED%8C%8C%EC%9D%BC">작업 계약서</a>에 적는다.</li>
+<li>[보안] 권한 철회는 세션이 끝났는지와 상관없이 <a href="AUTHORIZATION_AND_TENANT_ISOLATION.html">권한 부여와 데이터 격리</a>의 계약을 따른다.</li>
+<li>[보안] 비밀번호 인증을 지원하면 비밀번호를 안전한 해시 방식으로 저장하고, 로그인 시도 횟수를 제한한다. 로그인 응답으로 계정이 있는지 드러내지 않는다.</li>
+<li>[보안] 초대 토큰은 대상·용도·만료에 묶는다. 한 번만 쓸 수 있게 원자적으로 소비한다.</li>
+<li>[보안] 인증에 실패하면 세션이나 권한을 주지 않는다.</li>
+<li>[보안] 브라우저 JavaScript에 장기 자격증명이나 refresh token을 돌려주지 않는다.</li>
+<li>[보안] cookie로 인증하면 HTTPS에서 <code>Secure</code>와 <code>HttpOnly</code>를 쓴다. 교차 사이트 요청을 막는 <code>SameSite</code>·CSRF 방어도 함께 설계한다.</li>
+<li>[보안] 비밀번호·토큰·세션 식별자·인증 header를 로그와 오류 응답에 남기지 않는다.</li>
+<li>[보안] SSO는 처음 로그인 요청과 응답을 묶고, 선택한 프로토콜의 필수 검증 계약대로 응답을 검증한다. <a href="SSO_AND_PROVISIONING.html">SSO와 계정 프로비저닝</a>을 따른다. 검증이 끝나기 전에는 계정·조직 권한을 주지 않는다.</li>
+</ul>
+<h2 id="구현-절차">구현 절차</h2>
+<ol>
+<li><a href="../reference/CONCEPTS.html#%ED%98%BC%EC%9E%90%EC%99%80-%ED%8C%80-%EC%97%AD%ED%95%A0">FDE</a>가 사용자 유형과 보호할 기능을 정리하고, 가입·로그인·로그아웃·권한 철회 흐름을 그린다. 위 적용 전 결정 표의 값을 작업 계약에 적는다.</li>
+<li>개발자가 로그인 응답, cookie 또는 header, 만료 오류, 세션 식별자 교체, 갱신의 API 계약을 쓴다.</li>
+<li>개발자가 인증 다음에 적용할 역할·객체 접근 패턴을 <a href="AUTHORIZATION_AND_TENANT_ISOLATION.html">권한 부여와 데이터 격리</a>에 따라 연결한다.</li>
+<li>개발자가 개발·시험·운영 환경마다 HTTPS와 cookie 설정이 어떻게 다른지 증거 파일에 적는다. 운영 환경의 설정은 배포 전에 운영 권한을 가진 사람이 확인한다.</li>
+</ol>
+<h2 id="검증-계약">검증 계약</h2>
+<ul>
+<li>유효한 자격증명으로 보호 기능을 쓸 수 있다.</li>
+<li>자격증명이 없거나, 위조됐거나, 만료됐으면 같은 보호 기능을 쓸 수 없다.</li>
+<li>다음을 하나씩 넣으면 보호 기능 접근이 거부된다. 서버가 발급하지 않은 세션 ID, 폐기한 세션 ID, 허용하지 않은 알고리즘이나 신뢰하지 않는 키로 서명한 토큰, issuer가 다른 토큰, audience가 다른 토큰, 용도가 다른 토큰(예: refresh token을 접근 토큰 자리에 넣음)이다.</li>
+<li>세션 식별자 생성 코드와 설정을 확인해 암호학적으로 안전한 난수 생성기를 쓰고 정한 엔트로피 기준을 충족하는지 확인한다. 시간·순번·사용자 입력만으로 식별자를 만들지 않는다. 발급 표본에 중복이 없다는 것만으로 식별자를 예측할 수 없다고 판단하지 않는다.</li>
+<li>로그인 전 식별자와 교체 전 식별자로 보호 기능을 호출하면 거부된다. 권한이 올라가기 전 식별자로는 올라간 권한의 기능을 쓸 수 없다.</li>
+<li>유휴 만료 시간이 지나면 요청이 거부된다. 절대 만료 시점 뒤에는 그 사이에 요청이 계속 있었어도 거부된다.</li>
+<li>같은 refresh token을 동시에 쓰거나, 회전한 뒤 이전 refresh token을 다시 쓰면 정한 갱신·폐기 정책대로 처리된다.</li>
+<li>동작별 차단 대상과 시점을 시험한다. 로컬 로그아웃은 해당 클라이언트의 로그인 상태가 제거되는지, 서버 세션 폐기는 해당 세션의 접근이 거부되는지, refresh token 철회는 갱신이 거부되는지 확인한다. 접근 토큰은 정한 철회 확인 또는 만료 시점부터 거부된다. 권한 변경은 변경 후 <a href="AUTHORIZATION_AND_TENANT_ISOLATION.html#%EC%A0%81%EC%9A%A9-%EC%A0%84-%EA%B2%B0%EC%A0%95">권한 행렬</a>대로 판단한다. 각 경계 시각 전후와 이미 실행 중인 요청의 처리 결과를 확인한다.</li>
+<li>정한 로그인 실패 한도까지는 시도할 수 있고, 한도를 넘은 시도는 정한 대로 막힌다. 한도 직전과 직후를 시험한다.</li>
+<li>없는 계정과 있는 계정에 틀린 비밀번호를 보내면 같은 응답을 받는다. 저장된 비밀번호 값은 원문이 아니고 정한 해시 방식으로 만든 값이다.</li>
+<li>같은 초대 토큰으로 가입 요청을 동시에 보내면 한 건만 성공한다. 만료됐거나, 이미 썼거나, 대상이나 용도가 다른 초대 토큰은 거부된다.</li>
+<li>인증에 실패한 응답에는 세션 cookie나 토큰이 없고, 서버에 세션도 생기지 않는다.</li>
+<li>실제 응답의 <code>Set-Cookie</code>에서 <code>Secure</code>·<code>HttpOnly</code>·<code>SameSite</code> 플래그와 domain·path가 정한 값인지 확인한다.</li>
+<li>cookie 인증의 일반 상태 변경 경로에서 허용하지 않은 출처의 요청과 선택한 CSRF 방어를 통과하지 못한 요청은 변경 없이 거부된다. CSRF token 방식을 선택했으면 token 누락·불일치를 시험한다. SSO callback은 SSO 문서의 요청 결합·응답 검증 계약으로 시험한다.</li>
+<li>SSO 응답 검증에 실패한 사례(예: state 불일치)는 <a href="SSO_AND_PROVISIONING.html">SSO와 계정 프로비저닝</a>의 검증 계약대로 거부된다.</li>
+<li>로그인 성공·실패, 만료, 거부 사례에서 모든 로그와 오류 응답에 비밀번호·접근 토큰·refresh token·세션 ID·인증 header 값이 없다.</li>
+<li>응답 본문과 JavaScript가 읽을 수 있는 브라우저 저장소에 금지한 장기 자격증명이나 refresh token이 없다.</li>
+</ul>
+<h2 id="조건부-기술스택-프로필">조건부 기술스택 프로필</h2>
+<p>Rust/Loco, Spring Security, Node middleware 등은 세션을 구현하는 방식이 저마다 다르다. 프로젝트가
+프레임워크를 정한 뒤, 그 프레임워크의 공식 보안 지침을 함께 보며 프로필을 쓴다.</p>
+<h2 id="출처와-제한">출처와 제한</h2>
+<p>이 패턴은 이전 프로젝트들의 구현 경험에서 나왔다. 기준은 반드시 지킬 조건과 검증 계약이다. 특정 구현의 코드를
+그대로 가져다 쓰지 않고, 참고한 구현도 이 문서의 검증 계약을 통과해야 쓴다.</p>
+
+</main>
+</article><aside class="wiki-side" aria-label="이 칸"><h2>이 칸</h2><ul class="related"><li><a href="../../index.html#sec-reference">참조 목록</a></li><li><a href="../../index.html">문서 홈</a></li></ul></aside></div>
+</body>
+</html>

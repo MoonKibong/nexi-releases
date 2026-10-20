@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>트랜잭션과 변경 복구</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; color: #1f2933; line-height: 1.7; }
+h1, h2, h3 { line-height: 1.3; }
+a { color: #155e75; }
+pre { padding: 16px; overflow-x: auto; background: #0f172a; color: #e5e7eb; border-radius: 6px; }
+code { font-family: ui-monospace, monospace; font-size: .9em; }
+pre code { white-space: pre; }
+blockquote { margin: 16px 0; padding: 8px 16px; border-left: 4px solid #1793d1; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 12px; border: 1px solid #d7dde5; text-align: left; vertical-align: top; }
+th { background: #eef4f7; }
+.mermaid { overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+@media (max-width: 760px) { body { font-size: 15px; } table { min-width: 620px; } }
+</style>
+<style id="practice-wiki-shell">
+.wiki-content ol + pre, .wiki-content ol + .table-scroll { margin-left:2.2em; }
+.wiki-content blockquote.wiki-alert { border-left:4px solid #1793d1; background:#eef6fb; color:#1f2933; padding:10px 14px; margin:16px 0; }
+.wiki-content blockquote.wiki-alert .wiki-alert-title { display:block; font-weight:700; margin-bottom:4px; }
+.wiki-content blockquote.wiki-alert-tip { border-left-color:#1a7f37; background:#eef8f0; }
+.wiki-content blockquote.wiki-alert-important { border-left-color:#8250df; background:#f5f0fd; }
+.wiki-content blockquote.wiki-alert-warning { border-left-color:#bf8700; background:#fff8e5; }
+.wiki-content blockquote.reading-guide { border-left:4px solid #1793d1; background:#eef6fb; color:#45525e; font-size:14px; line-height:1.6; padding:8px 14px; margin:0 0 22px; }
+body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+.page { max-width:none; width:100%; margin:0; padding:0; border:0; box-shadow:none; background:transparent; }
+.page > header { display:none; }
+.wiki-global { height:48px; background:#2e2e2e; border-bottom:5px solid #1793d1; color:#fff; display:flex; align-items:center; padding:0 calc((100% - 1840px)/2 + 42px); gap:28px; }
+.wiki-global strong { color:#fff; font-size:15px; letter-spacing:.02em; white-space:nowrap; }
+.wiki-global a { color:#d8d8d8; text-decoration:none; font-size:14px; font-weight:700; }
+.wiki-global a:hover, .wiki-global a:focus, .wiki-global a[aria-current] { color:#fff; text-decoration:underline; }
+.wiki-tools { max-width:1840px; margin:auto; min-height:76px; padding:18px 42px; display:flex; align-items:center; gap:18px; }
+.wiki-tools .crumb { color:#5b6770; font-size:14px; }
+.wiki-tools .home-link { margin-left:auto; color:#087bb8; font-weight:700; text-decoration:none; }
+.audience-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; }
+.audience-internal { background:#5d4037; color:#fff; }
+.audience-client { background:#156f3c; color:#fff; }
+.audience-unspecified { background:#e7ebee; color:#46525a; }
+.asset-badges { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; }
+.asset-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; background:#e9eff4; color:#25465c; }
+.asset-badge.status-reviewed { background:#156f3c; color:#fff; }
+.asset-badge.status-candidate { background:#755b16; color:#fff; }
+.wiki-all-pages { margin-top:46px; padding-top:18px; border-top:2px solid #aeb8c1; }
+.wiki-all-pages details { margin:8px 0; }
+.wiki-all-pages summary { cursor:pointer; color:#087bb8; font-weight:700; }
+.wiki-all-pages ul { margin:7px 0 14px; }
+.wiki-layout { max-width:1840px; margin:28px auto 52px; padding:0 42px; display:grid; grid-template-columns:250px minmax(0, 1fr) 230px; gap:34px; align-items:start; }
+.wiki-toc, .wiki-side { font-size:14px; position:sticky; top:20px; }
+.wiki-toc h2, .wiki-side h2 { font-size:16px; margin:0 0 10px; padding:0 0 9px; border-bottom:1px solid #c8d0d7; }
+.wiki-toc ul { list-style:none; margin:0; padding:0; }
+.wiki-toc li { margin:0; padding:5px 0; line-height:1.35; }
+.wiki-toc li.level-3 { padding-left:16px; font-size:13px; }
+.wiki-toc a, .wiki-side a { color:#087bb8; text-decoration:none; }
+.wiki-toc a:hover, .wiki-side a:hover { text-decoration:underline; }
+.wiki-content { min-width:0; background:#fff; border:1px solid #cbd3da; padding:38px 44px 56px; }
+.wiki-content main > h1:first-child { margin-top:0; font-size:38px; border-bottom:2px solid #aeb8c1; padding-bottom:12px; }
+.wiki-content h2 { border-bottom:1px solid #aeb8c1; font-size:28px; margin-top:38px; }
+.wiki-content h3 { font-size:20px; }
+.wiki-content a { color:#087bb8; font-weight:600; }
+.wiki-content a.wiki-doc-path code { color:inherit; }
+.wiki-content main > h3 + ul li { margin:3px 0; }
+.wiki-all-pages h3.toc-group { font-size:14px; margin:12px 0 4px; color:#5b6670; }
+.wiki-all-pages p.toc-more { font-size:13px; color:#5b6670; margin:6px 0 0; }
+.wiki-side { color:#4e5961; }
+.wiki-side p { margin:7px 0 14px; line-height:1.4; }
+.wiki-side .related { margin:0; padding-left:18px; }
+.docs-wiki-nav { display:none; }
+@media (max-width:900px) {
+  .wiki-global { padding:0 18px; gap:16px; overflow-x:auto; }
+  .wiki-tools { padding:16px 18px; min-height:60px; }
+  .wiki-layout { display:block; margin:12px auto 32px; padding:0 18px; }
+  .wiki-toc, .wiki-side { position:static; margin:18px 0; }
+  .wiki-content { padding:28px 24px 38px; }
+}
+</style>
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js" integrity="sha384-o+g/BxPwhi0C3RK7oQBxQuNimeafQ3GE/ST4iT2BxVI4Wzt60SH4pq9iXVYujjaS" crossorigin="anonymous"></script>
+<script>document.addEventListener('DOMContentLoaded', async () => {
+  if (!window.mermaid) return;
+  window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
+  for (const code of document.querySelectorAll('pre > code.language-mermaid')) {
+    const original = code.parentElement;
+    const diagram = document.createElement('div');
+    diagram.className = 'mermaid';
+    diagram.textContent = code.textContent;
+    original.replaceWith(diagram);
+    try {
+      await window.mermaid.run({ nodes: [diagram] });
+    } catch {
+      diagram.replaceWith(original);
+    }
+  }
+});
+</script>
+</head>
+<body>
+<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#해결하는-문제">해결하는 문제</a></li><li class="level-2"><a href="#적용-전-결정">적용 전 결정</a></li><li class="level-2"><a href="#반드시-지킬-조건">반드시 지킬 조건</a></li><li class="level-2"><a href="#검증-계약">검증 계약</a></li><li class="level-2"><a href="#조건부-기술스택-프로필">조건부 기술스택 프로필</a></li><li class="level-2"><a href="#출처와-제한">출처와 제한</a></li></ul></aside><article class="page wiki-content"><div class="asset-badges"><span class="asset-badge">공통 계약</span><span class="asset-badge">문서 검토 완료</span><span class="asset-badge">technology-neutral</span></div>
+<header><h1 id="page-title">트랜잭션과 변경 복구</h1></header>
+<main>
+<h1 id="트랜잭션과-변경-복구">트랜잭션과 변경 복구</h1>
+<blockquote class="reading-guide"><strong>읽기 안내</strong> — 누가: 작업 계약을 쓰는 개발자, FDE ·
+언제: <code>T#</code>에서 이 문제를 풀 방법을 정할 때 ·
+읽은 뒤: 적용 전 결정을 고객·기술 책임자와 정하고, 반드시 지킬 조건을 수용 기준과 테스트에 넣는다.</blockquote>
+<h2 id="해결하는-문제">해결하는 문제</h2>
+<p>데이터 변경이 중간에 실패해도 업무 상태와 필수 감사 기록이 서로 어긋나지 않게 한다. 외부 효과는 나중에 다시
+처리할 수 있게 남긴다.</p>
+<h2 id="적용-전-결정">적용 전 결정</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>결정</th>
+<th>정할 내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>원자성 경계</td>
+<td>한 트랜잭션에 넣을 데이터</td>
+</tr>
+<tr>
+<td>업무 불변조건과 격리</td>
+<td>동시 실행에서도 지킬 업무 불변조건과, 그것을 지킬 격리 수준·잠금·조건부 갱신·제약</td>
+</tr>
+<tr>
+<td>재시도</td>
+<td>재시도해도 되는 오류(deadlock, 직렬화 실패 등), 최대 횟수와 시간. 경합에서 실패한 요청과 재시도를 모두 소진한 요청의 최종 응답 코드·업무 결과</td>
+</tr>
+<tr>
+<td>외부 전달</td>
+<td>외부 API·메일·파일 저장의 전달을 어디까지 보장할지. 수신 측 멱등 처리나 결과 조회·대사(기록끼리 맞춰 보기) 방법. 순서가 중요한 작업이면 순서를 알아보는 방법과 역전됐을 때의 처리</td>
+</tr>
+<tr>
+<td>실패와 보상</td>
+<td>영구 실패와 결과 불명 각각에 적용할 재처리·보상·수동 복구 방식, 전환 조건과 책임자</td>
+</tr>
+<tr>
+<td>lock 상한</td>
+<td>외부 지연 중에 DB lock을 잡고 있어도 되는 최대 시간</td>
+</tr>
+<tr>
+<td>복구 목표</td>
+<td>복구 지점 목표와 복구 시간 목표, 대사 대상과 판단 기준, 불일치를 처리할 책임자</td>
+</tr>
+<tr>
+<td>버전 공존</td>
+<td>구·신 앱을 함께 운영하는 배포를 택하면 지원할 버전 조합, 스키마 변경과 되돌리기 조건</td>
+</tr>
+</tbody></table></div>
+<h2 id="반드시-지킬-조건">반드시 지킬 조건</h2>
+<ul>
+<li>DB transaction이 외부 HTTP·메일·object storage까지 자동으로 되돌려 준다고 가정하지 않는다.</li>
+<li>동시 실행에서도 지킬 업무 불변조건을 적는다. 선택한 격리 수준·잠금·조건부 갱신·제약으로 그 조건을 지킨다.</li>
+<li>deadlock·직렬화 실패처럼 재시도해도 되는 오류가 나면 전체 트랜잭션을 정한 횟수와 시간 안에서 다시 실행한다. 재시도하면서 외부 효과를 중복 실행하지 않는다.</li>
+<li>업무 상태와 필수 감사 기록은 같은 원자성 경계 안에서 함께 저장한다.</li>
+<li>&quot;일부만 바뀐 상태가 남지 않는다&quot;는 정한 원자성 경계 안에 적용한다. 외부 효과까지 그렇게 된다고 약속하지 않는다.</li>
+<li>외부로 보낼 일(전달 의도)은 DB 변경과 함께 durable record로 남긴다. 실제로 보내는 쪽(전달자)은 재시도와 중복을 고려한다.</li>
+<li>외부 효과는 중복 전달과 응답 유실을 전제로, 결정표에서 선택한 수신 측 멱등 처리 또는 결과 조회·대사 절차로 연결한다. 외부 효과에 관한 결정과 검증은 이 문서에서 다룬다. key와 중복 판별 규칙은 <a href="IDEMPOTENCY_AND_CONCURRENCY.html">멱등성과 동시성</a>을 따른다. 전달 의도를 남기는 것만으로 중복 소비를 막았다고 보지 않는다.</li>
+<li>순서가 중요한 작업은 순서를 알아볼 수 있게 하고, 순서가 뒤바뀌었을 때의 처리를 정한 대로 따른다.</li>
+<li>영구 실패와 결과 불명에는 재처리·보상·수동 복구 중 하나의 책임을 둔다. 보상이 원래 효과를 완전히 되돌린다고 가정하지 않는다.</li>
+<li>외부 호출이 오래 걸리면, 그동안 DB lock을 정한 상한보다 오래 잡고 있지 않는다.</li>
+<li>백업을 복원하면 외부 효과의 처리 기록이 과거로 돌아갈 수 있다. 그래서 복원한 뒤 외부로 다시 보내기 전에 대사한다.</li>
+<li>구·신 앱을 함께 운영하는 배포는 정한 버전 조합과 스키마 변경·되돌리기 조건 안에서만 한다.</li>
+</ul>
+<h2 id="검증-계약">검증 계약</h2>
+<ul>
+<li>쓰기 단계마다 일부러 실패를 일으켜, 정한 원자성 경계 안에 일부만 바뀐 상태가 남지 않는지 확인한다.</li>
+<li>같은 자원을 소비하는 병렬 요청(예: 남은 수량이 1인 자원에 소비 요청 2건)을 보내면 업무 불변조건이 지켜진다. 경합에서 실패한 요청은 정한 응답을 받는다.</li>
+<li>변경 유실이나 write skew를 일으키는 동시 입력을 보내도 업무 불변조건이 지켜진다.</li>
+<li>재시도해도 되는 오류를 계속 일으켜 재시도를 다 쓰면 정한 오류 응답으로 끝난다. 일부만 바뀐 상태가 남지 않고, 재시도 중에 외부 효과가 중복 실행되지 않는다.</li>
+<li>commit 직후 프로세스가 종료돼도 전달 의도와 복구 정보가 남아 있다.</li>
+<li>외부 작업이 성공한 뒤 응답이 유실되는 상황을 주입한다. 수신 측 멱등 처리 방식이면 같은 key의 재전송이 추가 효과를 만들지 않는다. 결과 조회·대사 방식이면 성공을 확인한 효과는 다시 실행하지 않는다. 미실행과 이전 요청의 뒤늦은 성공 가능성을 배제했다고 확인하기 전에는 새 실행을 하지 않는다.</li>
+<li>같은 메시지를 두 번 보내거나 순서를 바꿔 보내면 정한 중복·역전 처리대로 끝난다.</li>
+<li>영구 실패를 주입하면 정한 재처리·보상·수동 복구 책임자에게 넘어간다. 보상 실패를 주입하면 그 효과가 미해결로 남고 책임자가 볼 수 있다.</li>
+<li>결과 조회·대사로도 성공 여부를 확정할 수 없는 장애를 주입하면 결과 불명 상태와 담당자가 남는다. 근거 없이 재실행하거나 성공으로 처리하지 않는다.</li>
+<li>외부 호출 지연을 주입했을 때 DB lock을 잡고 있는 시간이 정한 상한을 넘지 않는다.</li>
+<li>알려진 변경과 외부 효과 집합을 만든 뒤 지정 시점으로 복원한다. 손실 범위와 소요 시간이 목표 이내인지 확인한다. 누락·중복·미해결 효과가 대사 결과와 일치하는지 확인한다. 대사 전에는 외부로 다시 보내지 않는지도 확인한다.</li>
+<li>버전 공존을 선택한 경우, 정한 스키마 변경·되돌리기 조건 안에서 지원하는 버전 조합마다 같은 스키마로 읽기·쓰기를 하고, 배포를 되돌리는 복구를 실제로 시험한다.</li>
+</ul>
+<h2 id="조건부-기술스택-프로필">조건부 기술스택 프로필</h2>
+<p>Spring <code>@Transactional</code>, Django <code>atomic</code>, SQL transaction은 구현 수단이다. proxy·테스트 transaction·DB dialect에 따라 동작이 다를 수 있다. 이 차이를 확인하지 않고 어디서나 똑같이 동작한다고 가정하지 않는다.</p>
+<h2 id="출처와-제한">출처와 제한</h2>
+<p>이 패턴은 일반적인 트랜잭션·복구 원칙에서 나왔고, 참고한 프로젝트 구현은 없다. 그래서 첫 적용 때 이 문서의 검증
+계약으로 직접 확인한다. 기준은 반드시 지킬 조건과 검증 계약이다. 특정 구현의 코드를 그대로 가져다 쓰지 않고, 나중에
+참고할 구현이 생겨도 이 문서의 검증 계약을 통과해야 쓴다.</p>
+
+</main>
+</article><aside class="wiki-side" aria-label="이 칸"><h2>이 칸</h2><ul class="related"><li><a href="../../index.html#sec-reference">참조 목록</a></li><li><a href="../../index.html">문서 홈</a></li></ul></aside></div>
+</body>
+</html>

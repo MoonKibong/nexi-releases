@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>팀으로 일하기</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; color: #1f2933; line-height: 1.7; }
+h1, h2, h3 { line-height: 1.3; }
+a { color: #155e75; }
+pre { padding: 16px; overflow-x: auto; background: #0f172a; color: #e5e7eb; border-radius: 6px; }
+code { font-family: ui-monospace, monospace; font-size: .9em; }
+pre code { white-space: pre; }
+blockquote { margin: 16px 0; padding: 8px 16px; border-left: 4px solid #1793d1; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 12px; border: 1px solid #d7dde5; text-align: left; vertical-align: top; }
+th { background: #eef4f7; }
+.mermaid { overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+@media (max-width: 760px) { body { font-size: 15px; } table { min-width: 620px; } }
+</style>
+<style id="practice-wiki-shell">
+.wiki-content ol + pre, .wiki-content ol + .table-scroll { margin-left:2.2em; }
+.wiki-content blockquote.wiki-alert { border-left:4px solid #1793d1; background:#eef6fb; color:#1f2933; padding:10px 14px; margin:16px 0; }
+.wiki-content blockquote.wiki-alert .wiki-alert-title { display:block; font-weight:700; margin-bottom:4px; }
+.wiki-content blockquote.wiki-alert-tip { border-left-color:#1a7f37; background:#eef8f0; }
+.wiki-content blockquote.wiki-alert-important { border-left-color:#8250df; background:#f5f0fd; }
+.wiki-content blockquote.wiki-alert-warning { border-left-color:#bf8700; background:#fff8e5; }
+.wiki-content blockquote.reading-guide { border-left:4px solid #1793d1; background:#eef6fb; color:#45525e; font-size:14px; line-height:1.6; padding:8px 14px; margin:0 0 22px; }
+body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+.page { max-width:none; width:100%; margin:0; padding:0; border:0; box-shadow:none; background:transparent; }
+.page > header { display:none; }
+.wiki-global { height:48px; background:#2e2e2e; border-bottom:5px solid #1793d1; color:#fff; display:flex; align-items:center; padding:0 calc((100% - 1840px)/2 + 42px); gap:28px; }
+.wiki-global strong { color:#fff; font-size:15px; letter-spacing:.02em; white-space:nowrap; }
+.wiki-global a { color:#d8d8d8; text-decoration:none; font-size:14px; font-weight:700; }
+.wiki-global a:hover, .wiki-global a:focus, .wiki-global a[aria-current] { color:#fff; text-decoration:underline; }
+.wiki-tools { max-width:1840px; margin:auto; min-height:76px; padding:18px 42px; display:flex; align-items:center; gap:18px; }
+.wiki-tools .crumb { color:#5b6770; font-size:14px; }
+.wiki-tools .home-link { margin-left:auto; color:#087bb8; font-weight:700; text-decoration:none; }
+.audience-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; }
+.audience-internal { background:#5d4037; color:#fff; }
+.audience-client { background:#156f3c; color:#fff; }
+.audience-unspecified { background:#e7ebee; color:#46525a; }
+.asset-badges { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; }
+.asset-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; background:#e9eff4; color:#25465c; }
+.asset-badge.status-reviewed { background:#156f3c; color:#fff; }
+.asset-badge.status-candidate { background:#755b16; color:#fff; }
+.wiki-all-pages { margin-top:46px; padding-top:18px; border-top:2px solid #aeb8c1; }
+.wiki-all-pages details { margin:8px 0; }
+.wiki-all-pages summary { cursor:pointer; color:#087bb8; font-weight:700; }
+.wiki-all-pages ul { margin:7px 0 14px; }
+.wiki-layout { max-width:1840px; margin:28px auto 52px; padding:0 42px; display:grid; grid-template-columns:250px minmax(0, 1fr) 230px; gap:34px; align-items:start; }
+.wiki-toc, .wiki-side { font-size:14px; position:sticky; top:20px; }
+.wiki-toc h2, .wiki-side h2 { font-size:16px; margin:0 0 10px; padding:0 0 9px; border-bottom:1px solid #c8d0d7; }
+.wiki-toc ul { list-style:none; margin:0; padding:0; }
+.wiki-toc li { margin:0; padding:5px 0; line-height:1.35; }
+.wiki-toc li.level-3 { padding-left:16px; font-size:13px; }
+.wiki-toc a, .wiki-side a { color:#087bb8; text-decoration:none; }
+.wiki-toc a:hover, .wiki-side a:hover { text-decoration:underline; }
+.wiki-content { min-width:0; background:#fff; border:1px solid #cbd3da; padding:38px 44px 56px; }
+.wiki-content main > h1:first-child { margin-top:0; font-size:38px; border-bottom:2px solid #aeb8c1; padding-bottom:12px; }
+.wiki-content h2 { border-bottom:1px solid #aeb8c1; font-size:28px; margin-top:38px; }
+.wiki-content h3 { font-size:20px; }
+.wiki-content a { color:#087bb8; font-weight:600; }
+.wiki-content a.wiki-doc-path code { color:inherit; }
+.wiki-content main > h3 + ul li { margin:3px 0; }
+.wiki-all-pages h3.toc-group { font-size:14px; margin:12px 0 4px; color:#5b6670; }
+.wiki-all-pages p.toc-more { font-size:13px; color:#5b6670; margin:6px 0 0; }
+.wiki-side { color:#4e5961; }
+.wiki-side p { margin:7px 0 14px; line-height:1.4; }
+.wiki-side .related { margin:0; padding-left:18px; }
+.docs-wiki-nav { display:none; }
+@media (max-width:900px) {
+  .wiki-global { padding:0 18px; gap:16px; overflow-x:auto; }
+  .wiki-tools { padding:16px 18px; min-height:60px; }
+  .wiki-layout { display:block; margin:12px auto 32px; padding:0 18px; }
+  .wiki-toc, .wiki-side { position:static; margin:18px 0; }
+  .wiki-content { padding:28px 24px 38px; }
+}
+</style>
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js" integrity="sha384-o+g/BxPwhi0C3RK7oQBxQuNimeafQ3GE/ST4iT2BxVI4Wzt60SH4pq9iXVYujjaS" crossorigin="anonymous"></script>
+<script>document.addEventListener('DOMContentLoaded', async () => {
+  if (!window.mermaid) return;
+  window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
+  for (const code of document.querySelectorAll('pre > code.language-mermaid')) {
+    const original = code.parentElement;
+    const diagram = document.createElement('div');
+    diagram.className = 'mermaid';
+    diagram.textContent = code.textContent;
+    original.replaceWith(diagram);
+    try {
+      await window.mermaid.run({ nodes: [diagram] });
+    } catch {
+      diagram.replaceWith(original);
+    }
+  }
+});
+</script>
+</head>
+<body>
+<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start" aria-current="true">시작하기</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 시작하기</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#역할과-차례">역할과 차례</a></li><li class="level-2"><a href="#여러-fde가-나눠-맡기">여러 FDE가 나눠 맡기</a></li><li class="level-2"><a href="#팀을-나눌-때">팀을 나눌 때</a></li><li class="level-2"><a href="#이럴-때는">이럴 때는</a></li></ul></aside><article class="page wiki-content">
+<header><h1 id="page-title">팀으로 일하기</h1></header>
+<main>
+<h1 id="팀으로-일하기">팀으로 일하기</h1>
+<blockquote class="reading-guide"><strong>읽기 안내</strong> — 누가: 팀으로 시작한 프로젝트(<code>/nexi-init &lt;이름&gt; team</code>)의 모든 사람 ·
+언제: 작업 순환의 작업을 역할을 나눠 할 때 ·
+읽은 뒤: 자기 차례에 프롬프트를 넣고, 이슈 댓글로 다음 사람에게 넘긴다.</blockquote>
+<p>팀으로 할 때는 여러 사람이 각자의 컴퓨터에서 GitHub 저장소 하나를 같이 쓴다. 작업 순환의 단계를 역할마다 나눠 맡는다. 단계가 끝나면
+AI가 commit과 push를 하고, 이슈에 다음 차례를 댓글로 남긴다. 예제는
+5인 Step 4와
+멈췄을 때(내부 문서)다.</p>
+<h2 id="역할과-차례">역할과 차례</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>단계</th>
+<th>누가</th>
+<th>넣는 프롬프트</th>
+<th>끝나면</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 작업 고르기</td>
+<td>FDE</td>
+<td><code>/nexi-backlog next</code></td>
+<td>고른 작업이 나에게 지정된다</td>
+</tr>
+<tr>
+<td>2 작업 계약서</td>
+<td>FDE</td>
+<td><code>/nexi-contract &lt;N&gt;</code>, 디자인 시스템 작업이나 디자인 변경 작업이면 <code>/nexi-design &lt;N&gt;</code>도</td>
+<td>이슈에 &quot;PM 승인 차례&quot; (디자인 작업은 BRIEF까지 쓴 뒤)</td>
+</tr>
+<tr>
+<td>2 승인</td>
+<td>PM</td>
+<td><code>/nexi-contract &lt;N&gt; approve</code></td>
+<td>이슈에 &quot;개발자 구현 차례&quot;</td>
+</tr>
+<tr>
+<td>3 구현</td>
+<td>개발자</td>
+<td><code>/nexi-implement &lt;N&gt;</code></td>
+<td>PR이 열리고 이슈에 &quot;리뷰 차례&quot;</td>
+</tr>
+<tr>
+<td>4 리뷰</td>
+<td>검토자</td>
+<td><code>/nexi-review &lt;N&gt; prepare</code>(백그라운드 리뷰와 자동 기록, 또는 클립보드 복사 뒤 리뷰 agent에서 리뷰하고 <code>/nexi-review &lt;N&gt; record</code>)</td>
+<td>판정이 기록되고 PR에 댓글</td>
+</tr>
+<tr>
+<td>5 병합</td>
+<td>PM</td>
+<td><code>/nexi-merge &lt;N&gt;</code></td>
+<td><code>main</code>에 들어간 것을 확인하고 이슈를 닫는다</td>
+</tr>
+</tbody></table></div>
+<p>작업 하나의 차례는 아래 그림처럼 넘어간다. 열이 사람이고, 위에서 아래로 시간이 흐른다. 화살표 위의 글은 이슈에 남는 차례 댓글이다.</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant FDE
+    participant PM
+    participant DEV as 개발자
+    participant REV as 검토자
+    Note over FDE: /nexi-backlog next
+    Note over FDE: /nexi-contract N
+    opt 디자인 시스템 작업이나 디자인 변경 작업이면
+        Note over FDE: /nexi-design N
+    end
+    FDE-&gt;&gt;PM: 계약서 초안 PM 승인 차례
+    Note over PM: /nexi-contract N approve
+    PM-&gt;&gt;DEV: 계약 승인 개발자 구현 차례
+    alt 검토자가 리뷰한다
+        Note over DEV: /nexi-implement N 이 PR을 연다
+        DEV-&gt;&gt;REV: 리뷰 차례
+        Note over REV: /nexi-review N prepare 에서 리뷰하고 기록한다
+        loop REVISE가 나올 때마다
+            REV-&gt;&gt;DEV: 개발자 구현 차례
+            Note over DEV: /nexi-implement N 으로 고친다
+            DEV-&gt;&gt;REV: 리뷰 차례
+            Note over REV: 다시 리뷰하고 기록한다
+        end
+        REV-&gt;&gt;PM: APPROVE면 PM 병합 차례
+    else 개발자가 /nexi-run 으로 구현부터 판정 기록까지 한다
+        Note over DEV: /nexi-run N
+        DEV-&gt;&gt;REV: APPROVE면 검토자 확인 차례
+        Note over REV: /nexi-review N confirm
+        REV-&gt;&gt;PM: 검토자 확인 PM 병합 차례
+    end
+    Note over PM: /nexi-merge N 이 병합하고 수용한다
+    Note over PM: 리뷰를 기다리거나 승인된 다른 작업에 main을 반영한다
+</code></pre>
+<ul>
+<li><p>각자 GitHub 이슈와 PR의 알림을 켜 둔다. 이슈 댓글이 다음 차례와 그때의 commit 해시를 알려 준다. 리뷰 판정은 PR 댓글로 온다. 아직 이슈가 없는 요구사항 단계에서는 메신저로 알린다.</p>
+</li>
+<li><p>누가 무엇을 할 차례인지는 <code>/nexi-backlog status</code>로 본다. 열린 작업마다 상태, 담당자, 다음에 할 사람과 넣을 프롬프트, 근거를 보여 주고 아무것도 바꾸지 않는다. 이슈 댓글이 저장소 기록과 다르면 상태는 저장소 기록을 따른다. 예외는 하나다. 판정이 <code>원인 후보: 계속</code>으로 끝나고 PM이 그 판정을 기록한 commit 뒤에 <code>결정: 계속 — 개발자 차례</code> 댓글을 달았으면, 그 작업은 REVISE이고 다음은 개발자다.</p>
+</li>
+<li><p>한 작업은 한 번에 한 사람만 손댄다. 작업은 branch <code>t&lt;N&gt;</code>에서 하고, <code>main</code>에는 PM이 병합할 때만 들어간다.</p>
+</li>
+<li><p>승인, 병합, 백로그 만들기, 작업 나누기와 변경, 끝내기는 PM만 할 수 있다. AI가 <code>AGENTS.md</code>의 <code>PM:</code> 줄과 프롬프트를 넣은 사람을 비교해서 확인한다.</p>
+</li>
+<li><p>검토자는 <code>prepare</code>가 준비해 준 폴더에서, 지정된 commit을 리뷰한다. <code>prepare</code>는 리뷰할 수 있는 agent를 보여 주고 두 가지 중에 고르게 한다.</p>
+<ol>
+<li>지금 백그라운드로 리뷰 agent를 돌리고 판정을 자동으로 기록한다. 판정을 복사해 붙여 넣지 않는다. 기본 agent는 그 작업을 구현하지 않은 agent다. CuCu도 고를 수 있고(CuCu에 키트를 설치했을 때), 작업의 commit을 받은 임시 사본에서 리뷰한다. 리뷰가 그 사본을 바꾸면 판정을 쓰지 않는다.</li>
+<li>리뷰 프롬프트를 클립보드에 복사한다. 리뷰 agent를 따로 열어 붙여 넣고, 나온 판정을 <code>/nexi-review &lt;N&gt; record</code>에 붙여 넣는다.</li>
+</ol>
+<p>1은 리뷰가 끝날 때까지 최대 30분 걸린다. CuCu는 1로만 리뷰한다. <code>prepare</code>는 Claude Code나 Codex에서 연다.</p>
+</li>
+<li><p>개발자가 <code>/nexi-run &lt;N&gt;</code>으로 구현부터 판정 기록까지 한 번에 할 수도 있다. APPROVE로 멈추면 이슈에 &quot;검토자 확인 차례&quot;가 남는다. 개발자가 아닌 검토자가 <code>/nexi-review &lt;N&gt; confirm</code>을 넣고 기록된 판정과 근거(수용 기준마다의 판단, PNG마다의 대조)를 읽는다. 근거가 빠졌으면 확인하지 않고 <code>prepare</code>부터 리뷰를 다시 받는다. 확인하면 이슈에 &quot;검토자 확인 — PM 병합 차례&quot;가 남고, PM은 그 확인을 보고 병합한다. 확인한 뒤 branch가 바뀌면 그 확인은 쓰지 않고, PM이 병합할 때 직접 확인한다.</p>
+</li>
+</ul>
+<h2 id="여러-fde가-나눠-맡기">여러 FDE가 나눠 맡기</h2>
+<p>일을 동시에 더 하려면 FDE를 늘린다. 한 사람이 여러 작업을 동시에 돌리지는 않는다.</p>
+<ol>
+<li>PM이 백로그를 만들 때 작업마다 맡을 FDE를 정한다. 같은 파일이나 화면을 건드리는 작업은 되도록 한 사람에게 준다. 나중에 바꾸려면 <code>/nexi-backlog assign &lt;N&gt; &lt;아이디&gt;</code>를 넣는다.</li>
+<li>FDE는 <code>/nexi-backlog next</code>로 자기 작업 가운데 시작할 수 있는 것을 고른다. 자기 작업이 없으면 아무도 맡지 않은 작업을 골라 자기에게 지정한다. 이미 작업을 맡은 적이 있는 FDE만 그렇게 할 수 있다. 개발자나 검토자가 넣으면 PM에게 넘긴다. 남의 작업은 고르지 않는다.</li>
+<li>남의 작업에 <code>/nexi-contract</code>를 넣으면 AI가 멈춘다. 담당을 바꿔야 하면 PM에게 말한다.</li>
+</ol>
+<p>FDE는 맡은 작업이 병합될 때까지 그 작업을 이어 간다. 그 사이 <code>next</code>를 넣으면 그 작업을 다시 보여 준다. 개발자나 검토자에게 여러
+작업이 한꺼번에 오면 이슈 번호 순서로 처리하고, 순서를 바꿔야 하면 PM이 정한다.</p>
+<p>FDE가 한 명이어도 PM이 백로그를 만들 때 담당을 정한다. 작업 나누기, 변경, 끝내기 거절로 새로 생긴 이슈도 PM이 그때 담당을 정한다.
+담당이 없는 작업에는 <code>/nexi-contract</code>와 <code>/nexi-design</code>이 멈춘다.</p>
+<h2 id="팀을-나눌-때">팀을 나눌 때</h2>
+<p>팀을 나누는 곳은 백로그다. 요구사항까지는 팀이 하나로 일하고, PM이 <code>/nexi-backlog</code>로 작업을 만들 때 작업마다 어느 팀의 누가 맡을지
+정한다. 그 뒤로는 작업마다 같은 차례(계약서, 승인, 구현, 리뷰, 병합)를 돈다. 팀은 작업의 담당과 선행 작업으로만 나뉘고, 다른 절차는 없다.
+팀을 나누는 기준은 둘이다. 백엔드와 프런트엔드처럼 계층으로 나누거나, 고객 관리와 작업 배정처럼 모듈로 나눈다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>단계</th>
+<th>누가</th>
+<th>팀을 나누는가</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>시작, 요구사항</td>
+<td>PM, FDE 한 명</td>
+<td>나누지 않는다. 결정 문서 하나를 같이 승인한다</td>
+</tr>
+<tr>
+<td>백로그</td>
+<td>PM</td>
+<td>여기서 나눈다. 작업마다 담당 한 사람과 선행 작업을 정한다</td>
+</tr>
+<tr>
+<td>공통 기반 작업: 골격, 코드 표준, 디자인 시스템, 승인된 요구사항에 있는 로그인과 권한, 여러 팀이 쓰는 데이터 모델</td>
+<td>작업마다 담당 한 사람</td>
+<td>나누지 않는다. 백로그의 앞에 두고, 그것을 쓰는 기능 작업만 선행 작업으로 기다린다</td>
+</tr>
+<tr>
+<td>기능 작업</td>
+<td>작업을 맡은 팀</td>
+<td>팀마다 자기 작업을 <code>next</code>로 골라 동시에 진행한다</td>
+</tr>
+<tr>
+<td>리뷰, 병합</td>
+<td>검토자, PM</td>
+<td>모든 팀의 작업을 같은 사람이 같은 방식으로 한다</td>
+</tr>
+<tr>
+<td>끝내기</td>
+<td>PM</td>
+<td>나누지 않는다</td>
+</tr>
+</tbody></table></div>
+<p>어느 기준으로 나누든 백로그를 만들 때 지킬 것:</p>
+<ul>
+<li>작업 하나의 담당은 한 사람이다. 담당이 둘인 작업은 <code>/nexi-contract</code>가 멈춘다.</li>
+<li>다른 팀의 작업이 만든 것을 쓰는 작업은 그 작업을 선행 작업에 적는다. <code>next</code>는 선행 작업이 <code>main</code>에 수용된 작업만 고른다.</li>
+<li>팀 사이의 약속은 그것을 만드는 작업의 계약서에 적는다(주소, 요청과 응답의 모양, 오류, 데이터의 모양). 쓰는 쪽 계약서는 그것을 바꾸지 않고 인용한다. 바꿔야 하면 만드는 쪽 작업(이미 병합됐으면 변경 작업)으로 바꾼다.</li>
+<li>여러 팀이 같이 고치는 파일은 한 팀이 맡도록 작업을 나눈다. 그래도 겹치면 아래 충돌 규칙을 따른다.</li>
+<li>끝에 몰아서 하는 &quot;전체 테스트&quot; 작업이나 모두가 맡는 작업은 만들지 않는다. 검사는 작업마다 계약서에 들어가고, 마지막 확인은 끝내기가 한다.</li>
+<li>디자인 기준(BRIEF)은 하나다. 모든 팀의 화면이 그 기준을 따르고, 공통 구성 요소를 바꾸는 일은 디자인 변경 작업 하나로 한다.</li>
+<li>FDE가 자기 작업의 구현까지 맡아도 된다. 리뷰는 구현하지 않은 사람이 한다.</li>
+</ul>
+<p>기준마다 다른 것:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>계층 팀(백엔드, 프런트엔드)</th>
+<th>모듈 팀(예: 고객 관리, 작업 배정)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>작업을 자르는 법</td>
+<td>API와 화면을 모두 새로 만드는 기능은 API 작업과 화면 작업으로 나눈다. 이미 있는 API를 쓰는 화면은 나누지 않는다</td>
+<td>기능을 API와 화면으로 나누지 않는다. 한 팀이 자기 모듈의 API, 화면, 검사를 한 작업으로 맡는다</td>
+</tr>
+<tr>
+<td>팀 사이의 약속</td>
+<td>API 작업의 계약서</td>
+<td>다른 모듈이 쓰는 API나 데이터를 만드는 작업의 계약서</td>
+</tr>
+<tr>
+<td>기다리는 곳</td>
+<td>화면 작업은 그 API 작업이 병합된 뒤에 시작한다</td>
+<td>다른 모듈의 것을 실제로 쓰는 작업만 기다린다. 대부분 동시에 진행한다</td>
+</tr>
+<tr>
+<td>공통 기반의 담당</td>
+<td>골격과 코드 표준은 백엔드 팀, 디자인 시스템은 프런트엔드 팀</td>
+<td>공통 기반을 맡을 사람(공통 담당이나 첫 팀)을 정한다. 대부분의 모듈 작업이 이것을 쓰므로 먼저, 빨리 끝낸다</td>
+</tr>
+<tr>
+<td>자주 겹치는 파일</td>
+<td>API 타입 정의, 라우팅과 메뉴, seed 데이터</td>
+<td>DB 스키마와 마이그레이션, 메뉴, seed 데이터. 모듈은 자기 테이블만 더하고, 여러 모듈이 쓰는 테이블을 바꾸는 일은 담당 한 사람의 작업으로 한다</td>
+</tr>
+</tbody></table></div>
+<p>모듈 팀에서 두 모듈이 서로의 것을 계속 필요로 하면 경계가 잘못 그어진 것이다. 그 일을 한 모듈로 모은다. 모듈 팀 안을 다시 백엔드와
+프런트엔드로 나누면, 모듈 경계를 먼저 긋고 모듈 안에서 계층 팀의 규칙을 쓴다.</p>
+<p>팀이 많아질수록 PM이 병합하는 순서가 중요하다. 한 팀의 작업이 병합되면 다른 팀의 리뷰가 끝난 작업이 <code>main</code>을 다시 합치고 리뷰를 다시
+받아야 할 수 있다. 같은 <code>main</code> 위에서 승인을 받은 작업이 둘이면, 어느 쪽을 먼저 병합해도 다른 쪽은 다시 확인과 리뷰를 받는다.</p>
+<ol>
+<li>PM이 <code>/nexi-backlog status</code>로 승인된 작업을 보고 다음에 병합할 작업을 하나 고른다. 그동안 다른 작업의 개발과 리뷰는 계속한다. 다른 작업을 먼저 병합하거나 이 병합을 미루려면 <code>/nexi-merge &lt;N&gt;</code>을 넣기 전에 같은 대화에서 AI에게 그렇게 말한다.</li>
+<li>PM이 <code>/nexi-merge &lt;N&gt;</code>을 넣는다. AI는 병합하기 전에 다른 작업을 세 무리로 보여 준다. 이 병합 때문에 다시 리뷰를 받는 작업, 이미 <code>main</code>보다 뒤처진 작업, 상태를 알 수 없는 작업이다. AI는 이 목록을 보여 준 뒤 기다리지 않고 병합한다.</li>
+<li>병합과 수용이 끝나면 AI가 리뷰를 기다리거나 승인된 작업마다 새 <code>main</code>을 그 branch에 합치고 검사와 증거를 다시 만든다. 개발자는 아무것도 다시 넣지 않는다. 끝난 작업의 이슈에는 &quot;main 반영 — 리뷰 차례&quot;가 남고, 검토자가 그 작업을 다시 리뷰한다.</li>
+<li>AI가 반영하지 못한 작업의 이슈에는 &quot;main 이동 — 개발자 구현 차례&quot;와 이유가 남는다. 작업 파일 밖의 충돌, 검사 실패, 반영하는 도중의 개발자 push, CuCu로 병합한 경우다. 개발자가 <code>/nexi-implement &lt;N&gt;</code>으로 <code>main</code>을 합친다. 반영을 시작하기 전에 개발자가 이미 push했으면 AI는 그 작업을 건드리지 않고 댓글도 남기지 않으며, 보고에 &quot;건너뜀&quot;으로만 적는다. 그 작업은 개발자가 이어 간다.</li>
+<li>AI가 &quot;반영 상태 확인 필요&quot;와 실행 이름을 보고하면 다른 반영이 돌고 있거나 중단된 것이다. PM은 그 반영이 더는 돌고 있지 않은지 확인한 뒤, AI에게 그 실행을 끝내라고 한다(<code>nexi-refresh-claim.sh release</code>). 그다음 <code>/nexi-implement &lt;N&gt; refresh</code>를 넣거나 개발자에게 넘긴다. 중단된 반영이 이미 push했으면 <code>refresh</code>가 거기서 이어 간다.</li>
+</ol>
+<p>PM은 <code>/nexi-backlog</code> 다음 줄에 팀 구성에 맞는 글을 붙여 넣는다. 계층 팀이면:</p>
+<pre><code class="language-text">/nexi-backlog
+백엔드 팀(FDE: &lt;아이디&gt;)과 프런트엔드 팀(FDE: &lt;아이디&gt;, &lt;아이디&gt;)으로 나눠 일한다. API와 화면을 모두 새로 만드는 기능은 API 작업과
+화면 작업으로 나누고, 화면 작업의 선행 작업에 그 API 작업을 적어라. 이미 있는 API를 쓰는 화면은 나누지 않는다. 작업마다 담당은 한 사람이다.
+골격과 코드 표준은 백엔드 팀, 디자인 시스템은 프런트엔드 팀이 맡는다.
+</code></pre>
+<p>모듈 팀이면:</p>
+<pre><code class="language-text">/nexi-backlog
+&lt;모듈 이름&gt; 팀(FDE: &lt;아이디&gt;), &lt;모듈 이름&gt; 팀(FDE: &lt;아이디&gt;)으로 모듈마다 나눠 일한다. 기능은 API와 화면을 나누지 않고 그 모듈 팀의
+작업 하나로 만든다. 다른 모듈의 API나 데이터를 쓰는 작업은 그것을 만드는 작업을 선행 작업에 적어라. 골격, 코드 표준, 디자인 시스템, 그리고 승인된 요구사항에 있으면 로그인과 권한, 여러 모듈이 쓰는 데이터 모델을 이 순서로 공통 기반 작업으로 먼저 두고, 담당은 &lt;아이디&gt;다. 각 작업은 실제로 쓰는 공통 기반 작업만 선행 작업에 적어라. 작업마다 담당은 한 사람이다.
+</code></pre>
+<h2 id="이럴-때는">이럴 때는</h2>
+<p>AI·하네스 운영자(agent 실행 환경을 맡은 사람)가 있는 팀이면 PM은 그 사람과 함께 정한다. 없으면 PM이 정한다.</p>
+<ul>
+<li>선행 작업이 아직 병합되지 않았다. <code>next</code>가 그 작업을 고르지 않는다. 다른 작업을 하거나, 선행 작업이 병합되기를 기다린다.</li>
+<li>리뷰를 받은 뒤 다른 작업이 먼저 병합됐다. PM의 <code>/nexi-merge</code>가 멈춘다. 개발자가 <code>/nexi-implement &lt;N&gt;</code>을 다시 넣으면 AI가 최신 <code>main</code>을 합치고(rebase는 하지 않는다) 검사와 스크린샷을 다시 만든다. 그다음 검토자가 다시 리뷰한다.</li>
+<li>병합 충돌이 났다. 이 작업의 파일 안에서 생긴 충돌은 구현하면서 해결한다. 이 작업이 이미 바꾼 파일이나 작업 계약서에 적힌 파일이 아닌 곳에서 충돌하면 AI가 합치기를 취소하고 멈춘다. 어느 작업에서 그 파일을 고칠지 PM이 정한다. 정한 작업의 FDE가 계약서에 그 파일을 적어 고치고, PM이 다시 승인한 뒤, 개발자가 <code>/nexi-implement &lt;N&gt;</code>을 다시 넣는다.</li>
+<li>리뷰 뒤에 무언가 바뀌었다. 판정 기록 말고 코드, 작업 계약서, 증거, 스크린샷이 바뀌었으면 병합하지 않고 리뷰를 다시 받는다.</li>
+<li>병합은 됐는데 확인에서 걸렸다. 예를 들어 병합 직전에 다른 작업이 먼저 들어가, 리뷰한 상태 위에 병합되지 않았다. AI가 이슈를 닫지 않고(닫혔으면 다시 열고) 멈춘다. 이 작업은 끝난 것이 아니다. 이미 <code>main</code>에 들어간 변경을 어떻게 할지(예: 되돌리는 새 작업) PM이 정한다.</li>
+<li>push가 실패했다. 이슈와 PR을 열어 둔다. 원인을 해결한 뒤 같은 프롬프트를 다시 넣는다. AI가 이미 만든 commit을 push한다.</li>
+<li>REVISE가 세 번 이어졌거나 BLOCK이 나왔다. PM이 판정의 <code>원인 후보</code>를 보고(세 번째 REVISE나 예전 형식의 BLOCK이면 원인을 모두 따져 보고) 원인을 정해 이슈에 <code>결정: &lt;원인&gt; — &lt;다음 사람&gt; 차례</code> 댓글을 단다. 원인이 리뷰 독립성이면 댓글 없이 다른 agent가 같은 파일을 다시 리뷰한다. 원인별 다음 차례는 <a href="04_TASK_CYCLE.html#%EC%9D%B4%EB%9F%B4-%EB%95%8C%EB%8A%94">작업 순환</a>의 표와 같고, 팀에서는 이렇게 나눈다.<ul>
+<li>계약서: 댓글은 정확히 <code>결정: 계약서 — 개발자 차례</code>다. 개발자가 <code>/nexi-implement &lt;N&gt;</code>을 넣으면 AI가 작업을 push하고, 개발자가 이슈 담당자(FDE)면 고친 계약서 초안까지 올린다. 담당자가 아니면 <code>계약 변경 필요 — FDE 차례</code> 댓글을 달고 FDE가 <code>/nexi-contract &lt;N&gt;</code>으로 고친다. PM이 <code>/nexi-contract &lt;N&gt; approve</code>로 승인한다.</li>
+<li>작업 크기: PM이 <code>/nexi-backlog split &lt;N&gt;</code>으로 나눈다. AI가 그 작업의 PR을 병합하지 않고 닫는다. 개발자는 옛 폴더를 그대로 두고 <code>/nexi-init clone</code>으로 받은 새 폴더에서 이어 간다. 나눈 작업은 FDE가 <code>next</code>로 골라 작업 계약서부터 다시 시작한다.</li>
+<li>디자인 기준: PM이 <code>/nexi-backlog change</code>(디자인)와 <code>/nexi-backlog split &lt;N&gt;</code>을 한다.</li>
+<li>요구사항: FDE가 <code>/nexi-requirements decide</code>를 하고 PM이 승인한 뒤 계약서 원인처럼 한다.</li>
+<li>계속: 판정이 <code>원인 후보: 계속</code>으로 끝날 때만 PM이 고른다. 판정이 기록된 뒤에 다는 댓글만 인정된다. 댓글은 정확히 <code>결정: 계속 — 개발자 차례</code>이고, 개발자가 <code>/nexi-implement &lt;N&gt;</code>으로 그 판정의 지적을 고친다. 다음 REVISE에는 새 결정이 필요하다.</li>
+</ul>
+</li>
+<li>구현하다가 승인된 작업 계약서대로 끝낼 수 없다는 것이 드러났다. 리뷰를 기다리지 않는다. 개발자가 <code>/nexi-implement &lt;N&gt;</code>을 다시 넣으면 AI가 작업을 push하고, 위의 계약서 원인과 같은 순서로 고친 계약서가 PM 승인 차례가 된다.</li>
+<li>누가 자리를 비웠다. 그 단계를 다른 사람이 이어받아야 하면 PM이 정한다. 같은 사람이 돌아오면 하던 단계의 프롬프트를 다시 넣는다.</li>
+</ul>
+<p>누가 무엇을 정했는지는 이슈 댓글로 남긴다.</p>
+<p>다음은 <a href="06_CHANGE.html">끝난 작업 바꾸기</a>다.</p>
+
+</main>
+</article><aside class="wiki-side" aria-label="이 칸"><h2>이 칸</h2><ul class="related"><li><a href="../../index.html#sec-start">시작하기 목록</a></li><li><a href="../../index.html">문서 홈</a></li></ul></aside></div>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>페이지네이션과 조회</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; color: #1f2933; line-height: 1.7; }
+h1, h2, h3 { line-height: 1.3; }
+a { color: #155e75; }
+pre { padding: 16px; overflow-x: auto; background: #0f172a; color: #e5e7eb; border-radius: 6px; }
+code { font-family: ui-monospace, monospace; font-size: .9em; }
+pre code { white-space: pre; }
+blockquote { margin: 16px 0; padding: 8px 16px; border-left: 4px solid #1793d1; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 12px; border: 1px solid #d7dde5; text-align: left; vertical-align: top; }
+th { background: #eef4f7; }
+.mermaid { overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+@media (max-width: 760px) { body { font-size: 15px; } table { min-width: 620px; } }
+</style>
+<style id="practice-wiki-shell">
+.wiki-content ol + pre, .wiki-content ol + .table-scroll { margin-left:2.2em; }
+.wiki-content blockquote.wiki-alert { border-left:4px solid #1793d1; background:#eef6fb; color:#1f2933; padding:10px 14px; margin:16px 0; }
+.wiki-content blockquote.wiki-alert .wiki-alert-title { display:block; font-weight:700; margin-bottom:4px; }
+.wiki-content blockquote.wiki-alert-tip { border-left-color:#1a7f37; background:#eef8f0; }
+.wiki-content blockquote.wiki-alert-important { border-left-color:#8250df; background:#f5f0fd; }
+.wiki-content blockquote.wiki-alert-warning { border-left-color:#bf8700; background:#fff8e5; }
+.wiki-content blockquote.reading-guide { border-left:4px solid #1793d1; background:#eef6fb; color:#45525e; font-size:14px; line-height:1.6; padding:8px 14px; margin:0 0 22px; }
+body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+.page { max-width:none; width:100%; margin:0; padding:0; border:0; box-shadow:none; background:transparent; }
+.page > header { display:none; }
+.wiki-global { height:48px; background:#2e2e2e; border-bottom:5px solid #1793d1; color:#fff; display:flex; align-items:center; padding:0 calc((100% - 1840px)/2 + 42px); gap:28px; }
+.wiki-global strong { color:#fff; font-size:15px; letter-spacing:.02em; white-space:nowrap; }
+.wiki-global a { color:#d8d8d8; text-decoration:none; font-size:14px; font-weight:700; }
+.wiki-global a:hover, .wiki-global a:focus, .wiki-global a[aria-current] { color:#fff; text-decoration:underline; }
+.wiki-tools { max-width:1840px; margin:auto; min-height:76px; padding:18px 42px; display:flex; align-items:center; gap:18px; }
+.wiki-tools .crumb { color:#5b6770; font-size:14px; }
+.wiki-tools .home-link { margin-left:auto; color:#087bb8; font-weight:700; text-decoration:none; }
+.audience-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; }
+.audience-internal { background:#5d4037; color:#fff; }
+.audience-client { background:#156f3c; color:#fff; }
+.audience-unspecified { background:#e7ebee; color:#46525a; }
+.asset-badges { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; }
+.asset-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; background:#e9eff4; color:#25465c; }
+.asset-badge.status-reviewed { background:#156f3c; color:#fff; }
+.asset-badge.status-candidate { background:#755b16; color:#fff; }
+.wiki-all-pages { margin-top:46px; padding-top:18px; border-top:2px solid #aeb8c1; }
+.wiki-all-pages details { margin:8px 0; }
+.wiki-all-pages summary { cursor:pointer; color:#087bb8; font-weight:700; }
+.wiki-all-pages ul { margin:7px 0 14px; }
+.wiki-layout { max-width:1840px; margin:28px auto 52px; padding:0 42px; display:grid; grid-template-columns:250px minmax(0, 1fr) 230px; gap:34px; align-items:start; }
+.wiki-toc, .wiki-side { font-size:14px; position:sticky; top:20px; }
+.wiki-toc h2, .wiki-side h2 { font-size:16px; margin:0 0 10px; padding:0 0 9px; border-bottom:1px solid #c8d0d7; }
+.wiki-toc ul { list-style:none; margin:0; padding:0; }
+.wiki-toc li { margin:0; padding:5px 0; line-height:1.35; }
+.wiki-toc li.level-3 { padding-left:16px; font-size:13px; }
+.wiki-toc a, .wiki-side a { color:#087bb8; text-decoration:none; }
+.wiki-toc a:hover, .wiki-side a:hover { text-decoration:underline; }
+.wiki-content { min-width:0; background:#fff; border:1px solid #cbd3da; padding:38px 44px 56px; }
+.wiki-content main > h1:first-child { margin-top:0; font-size:38px; border-bottom:2px solid #aeb8c1; padding-bottom:12px; }
+.wiki-content h2 { border-bottom:1px solid #aeb8c1; font-size:28px; margin-top:38px; }
+.wiki-content h3 { font-size:20px; }
+.wiki-content a { color:#087bb8; font-weight:600; }
+.wiki-content a.wiki-doc-path code { color:inherit; }
+.wiki-content main > h3 + ul li { margin:3px 0; }
+.wiki-all-pages h3.toc-group { font-size:14px; margin:12px 0 4px; color:#5b6670; }
+.wiki-all-pages p.toc-more { font-size:13px; color:#5b6670; margin:6px 0 0; }
+.wiki-side { color:#4e5961; }
+.wiki-side p { margin:7px 0 14px; line-height:1.4; }
+.wiki-side .related { margin:0; padding-left:18px; }
+.docs-wiki-nav { display:none; }
+@media (max-width:900px) {
+  .wiki-global { padding:0 18px; gap:16px; overflow-x:auto; }
+  .wiki-tools { padding:16px 18px; min-height:60px; }
+  .wiki-layout { display:block; margin:12px auto 32px; padding:0 18px; }
+  .wiki-toc, .wiki-side { position:static; margin:18px 0; }
+  .wiki-content { padding:28px 24px 38px; }
+}
+</style>
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js" integrity="sha384-o+g/BxPwhi0C3RK7oQBxQuNimeafQ3GE/ST4iT2BxVI4Wzt60SH4pq9iXVYujjaS" crossorigin="anonymous"></script>
+<script>document.addEventListener('DOMContentLoaded', async () => {
+  if (!window.mermaid) return;
+  window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
+  for (const code of document.querySelectorAll('pre > code.language-mermaid')) {
+    const original = code.parentElement;
+    const diagram = document.createElement('div');
+    diagram.className = 'mermaid';
+    diagram.textContent = code.textContent;
+    original.replaceWith(diagram);
+    try {
+      await window.mermaid.run({ nodes: [diagram] });
+    } catch {
+      diagram.replaceWith(original);
+    }
+  }
+});
+</script>
+</head>
+<body>
+<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#해결하는-문제">해결하는 문제</a></li><li class="level-2"><a href="#언제-사용하는가">언제 사용하는가</a></li><li class="level-2"><a href="#적용-전-결정">적용 전 결정</a></li><li class="level-2"><a href="#반드시-지킬-조건">반드시 지킬 조건</a></li><li class="level-2"><a href="#구현-절차">구현 절차</a></li><li class="level-2"><a href="#검증-계약">검증 계약</a></li><li class="level-2"><a href="#조건부-기술스택-프로필">조건부 기술스택 프로필</a></li><li class="level-2"><a href="#출처와-제한">출처와 제한</a></li></ul></aside><article class="page wiki-content"><div class="asset-badges"><span class="asset-badge">공통 계약</span><span class="asset-badge">문서 검토 완료</span><span class="asset-badge">technology-neutral</span></div>
+<header><h1 id="page-title">페이지네이션과 조회</h1></header>
+<main>
+<h1 id="페이지네이션과-조회">페이지네이션과 조회</h1>
+<blockquote class="reading-guide"><strong>읽기 안내</strong> — 누가: 작업 계약을 쓰는 개발자, FDE ·
+언제: <code>T#</code>에서 이 문제를 풀 방법을 정할 때 ·
+읽은 뒤: 적용 전 결정을 고객·기술 책임자와 정하고, 반드시 지킬 조건을 수용 기준과 테스트에 넣는다.</blockquote>
+<h2 id="해결하는-문제">해결하는 문제</h2>
+<p>많은 데이터를 목록으로 조회할 때 권한을 지킨다. 조건이 같으면 순서와 페이지 결과를 예측할 수 있게 한다.</p>
+<h2 id="언제-사용하는가">언제 사용하는가</h2>
+<p>목록 결과가 한 화면·한 응답을 넘거나, 검색·다중 필터·정렬·내보내기 기능이 있으면 적용한다. 수십 건짜리
+고정 참조 데이터처럼 한 번에 다 보내는 편이 더 단순하면 적용하지 않는다.</p>
+<h2 id="적용-전-결정">적용 전 결정</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>결정</th>
+<th>정할 내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>페이지 방식</td>
+<td>offset/page와 cursor 중 데이터 규모·변경 빈도에 맞는 방식</td>
+</tr>
+<tr>
+<td>기본·최대 크기</td>
+<td>기본 page size, 허용 최소·최대, 최대를 넘었을 때 거부할지 제한할지</td>
+</tr>
+<tr>
+<td>정렬</td>
+<td>허용 필드, 기본 순서, 정렬 값이 같을 때 순서를 정할 유일키, null 정렬 규칙</td>
+</tr>
+<tr>
+<td>필터</td>
+<td>허용 필드·연산자, 다중 필터의 AND/OR 의미, 빈 배열의 의미</td>
+</tr>
+<tr>
+<td>일관성</td>
+<td>페이지를 넘기는 동안 데이터가 바뀔 때 허용할 중복·누락·최신성, 조건이 바뀐 cursor를 거부할지 처음부터 다시 할지</td>
+</tr>
+<tr>
+<td>count와 export</td>
+<td>total count·export의 비용을 어떻게 제한할지(권한·기본 필터는 아래 조건대로 items와 같게 건다)</td>
+</tr>
+</tbody></table></div>
+<h2 id="반드시-지킬-조건">반드시 지킬 조건</h2>
+<ul>
+<li>page와 page size는 숫자 범위와 상한을 검사한다. 정수가 아니거나 최소보다 작은 값(0·음수 포함)은 정한 검증 오류로 거부한다. 최대를 넘는 값은 결정표에서 정한 대로 거부하거나 최대로 제한한다.</li>
+<li>정렬 기준 맨 마지막에 유일키를 넣는다. 그래야 같은 요청을 다시 보내도 결과 순서가 제멋대로 바뀌지 않는다.</li>
+<li>[보안] items, total count, export는 같은 tenant·권한·기본 필터를 쓴다.</li>
+<li>[보안] total count는 items와 같은 권한 범위와 사용자 필터를 적용한 전체 건수다. 범위가 다른 집계나 export가 필요하면 이름과 계약을 따로 둔다.</li>
+<li>[보안] cursor의 형식과 현재 조회 조건에 맞는지를 검증한다. cursor에 든 tenant·권한 값은 믿지 않는다. 다음 페이지 요청에서도 서버가 권한을 다시 확인한다.</li>
+<li>[보안] 정렬·필터 필드와 연산자는 allowlist로 제한하고, 쿼리 값은 바인딩한다.</li>
+<li>[보안] 사용자 필터가 권한 필터를 대신하지 않는다. 권한 필터를 먼저 걸고, 그 위에 사용자가 고른 조건을 더한다.</li>
+<li>데이터가 바뀌지 않는 동안에는 유일키를 포함한 정렬로 페이지 사이의 중복·누락을 막는다. 페이지를 넘기는 동안 데이터가 바뀌면 중복·누락·최신성을 어디까지 허용할지 API 계약에 따로 정한다. cursor만으로 snapshot 일관성이 보장된다고 보지 않는다. 같은 시점의 데이터를 빠짐없이 순회해야 하면 snapshot이나 그와 같은 효과를 내는 조회 기준을 유지한다.</li>
+</ul>
+<h2 id="구현-절차">구현 절차</h2>
+<ol>
+<li><a href="../reference/CONCEPTS.html#%ED%98%BC%EC%9E%90%EC%99%80-%ED%8C%80-%EC%97%AD%ED%95%A0">FDE</a>가 화면·API마다 무엇을 조회하려는지, 어떤 필터·정렬이 필요한지 정리한다.</li>
+<li>개발자가 요청·응답 형식, 기본값, 오류 응답을 작업 계약에 적는다.</li>
+<li>개발자가 items/count/export의 모든 쿼리에 권한 조건이 들어갔는지 확인한다.</li>
+<li>개발자가 정렬 값이 같은 데이터와 다른 tenant 데이터를 넣고 페이지를 넘기는 검사를 만들고, 결과를 증거 파일에 남긴다. 리뷰에서 그 결과를 대조한다.</li>
+</ol>
+<h2 id="검증-계약">검증 계약</h2>
+<ul>
+<li>첫 페이지, 마지막 페이지, 빈 결과, page size 최소·최대·0·음수·초과값을 확인한다. page와 page size에 정수가 아니거나 최소보다 작은 값이 오면 정한 검증 오류로 거부한다. 최대 크기를 넘으면 결정표대로 거부하거나 제한한다.</li>
+<li>데이터를 고정한 채 같은 조건으로 다시 요청하거나 페이지를 넘기면, 정렬 값이 같은 데이터가 중복·누락·순서 변경 없이 나온다.</li>
+<li>페이지 사이에 삽입·삭제·정렬 값 변경이 일어나면, 정한 일관성 계약에 적은 기대 결과대로 나온다.</li>
+<li>허용하지 않은 정렬·필터 필드와 연산자는 거부된다. 필터 값에 <code>&#39; OR 1=1 --</code> 같은 주입 문자열을 넣었을 때 타입에 맞지 않으면 검증 오류를 돌려준다. 타입에 맞는 문자열이면 고른 연산자의 데이터 값으로만 처리한다. 내부 쿼리 오류 내용은 응답에 드러나지 않는다.</li>
+<li>다른 tenant·권한의 데이터가 items, count, export 어디에도 섞이지 않는다.</li>
+<li>total count·export가 정한 비용 상한을 넘으면 결정한 대로 동작한다.</li>
+<li>필터를 바꾼 뒤, 다른 tenant에서, 권한이 철회된 뒤 cursor를 다시 쓰면 거부되거나 명시한 재시작 동작을 한다. 어느 경우에도 다른 범위의 데이터가 드러나지 않는다.</li>
+<li>필터를 바꾸면 페이지를 처음으로 되돌릴지 등, UI·API가 약속한 동작을 확인한다.</li>
+</ul>
+<h2 id="조건부-기술스택-프로필">조건부 기술스택 프로필</h2>
+<p>SeaORM/Loco pagination, Spring Data <code>Pageable</code>, SQL cursor, React data table은 구현 선택지다. 복잡한 검색에
+POST <code>/search</code>를 쓸지 GET query를 쓸지는 캐시·URL 공유·필터 복잡도를 보고 프로젝트에서 정한다.</p>
+<h2 id="출처와-제한">출처와 제한</h2>
+<p>이 패턴은 이전 프로젝트들의 구현 경험에서 나왔다. 기준은 반드시 지킬 조건과 검증 계약이다. 특정 구현의 코드를
+그대로 가져다 쓰지 않고, 참고한 구현도 이 문서의 검증 계약을 통과해야 쓴다.</p>
+
+</main>
+</article><aside class="wiki-side" aria-label="이 칸"><h2>이 칸</h2><ul class="related"><li><a href="../../index.html#sec-reference">참조 목록</a></li><li><a href="../../index.html">문서 홈</a></li></ul></aside></div>
+</body>
+</html>

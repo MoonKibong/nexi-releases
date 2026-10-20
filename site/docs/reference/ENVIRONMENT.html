@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>환경 프로필</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; color: #1f2933; line-height: 1.7; }
+h1, h2, h3 { line-height: 1.3; }
+a { color: #155e75; }
+pre { padding: 16px; overflow-x: auto; background: #0f172a; color: #e5e7eb; border-radius: 6px; }
+code { font-family: ui-monospace, monospace; font-size: .9em; }
+pre code { white-space: pre; }
+blockquote { margin: 16px 0; padding: 8px 16px; border-left: 4px solid #1793d1; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 12px; border: 1px solid #d7dde5; text-align: left; vertical-align: top; }
+th { background: #eef4f7; }
+.mermaid { overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+@media (max-width: 760px) { body { font-size: 15px; } table { min-width: 620px; } }
+</style>
+<style id="practice-wiki-shell">
+.wiki-content ol + pre, .wiki-content ol + .table-scroll { margin-left:2.2em; }
+.wiki-content blockquote.wiki-alert { border-left:4px solid #1793d1; background:#eef6fb; color:#1f2933; padding:10px 14px; margin:16px 0; }
+.wiki-content blockquote.wiki-alert .wiki-alert-title { display:block; font-weight:700; margin-bottom:4px; }
+.wiki-content blockquote.wiki-alert-tip { border-left-color:#1a7f37; background:#eef8f0; }
+.wiki-content blockquote.wiki-alert-important { border-left-color:#8250df; background:#f5f0fd; }
+.wiki-content blockquote.wiki-alert-warning { border-left-color:#bf8700; background:#fff8e5; }
+.wiki-content blockquote.reading-guide { border-left:4px solid #1793d1; background:#eef6fb; color:#45525e; font-size:14px; line-height:1.6; padding:8px 14px; margin:0 0 22px; }
+body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+.page { max-width:none; width:100%; margin:0; padding:0; border:0; box-shadow:none; background:transparent; }
+.page > header { display:none; }
+.wiki-global { height:48px; background:#2e2e2e; border-bottom:5px solid #1793d1; color:#fff; display:flex; align-items:center; padding:0 calc((100% - 1840px)/2 + 42px); gap:28px; }
+.wiki-global strong { color:#fff; font-size:15px; letter-spacing:.02em; white-space:nowrap; }
+.wiki-global a { color:#d8d8d8; text-decoration:none; font-size:14px; font-weight:700; }
+.wiki-global a:hover, .wiki-global a:focus, .wiki-global a[aria-current] { color:#fff; text-decoration:underline; }
+.wiki-tools { max-width:1840px; margin:auto; min-height:76px; padding:18px 42px; display:flex; align-items:center; gap:18px; }
+.wiki-tools .crumb { color:#5b6770; font-size:14px; }
+.wiki-tools .home-link { margin-left:auto; color:#087bb8; font-weight:700; text-decoration:none; }
+.audience-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; }
+.audience-internal { background:#5d4037; color:#fff; }
+.audience-client { background:#156f3c; color:#fff; }
+.audience-unspecified { background:#e7ebee; color:#46525a; }
+.asset-badges { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; }
+.asset-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; background:#e9eff4; color:#25465c; }
+.asset-badge.status-reviewed { background:#156f3c; color:#fff; }
+.asset-badge.status-candidate { background:#755b16; color:#fff; }
+.wiki-all-pages { margin-top:46px; padding-top:18px; border-top:2px solid #aeb8c1; }
+.wiki-all-pages details { margin:8px 0; }
+.wiki-all-pages summary { cursor:pointer; color:#087bb8; font-weight:700; }
+.wiki-all-pages ul { margin:7px 0 14px; }
+.wiki-layout { max-width:1840px; margin:28px auto 52px; padding:0 42px; display:grid; grid-template-columns:250px minmax(0, 1fr) 230px; gap:34px; align-items:start; }
+.wiki-toc, .wiki-side { font-size:14px; position:sticky; top:20px; }
+.wiki-toc h2, .wiki-side h2 { font-size:16px; margin:0 0 10px; padding:0 0 9px; border-bottom:1px solid #c8d0d7; }
+.wiki-toc ul { list-style:none; margin:0; padding:0; }
+.wiki-toc li { margin:0; padding:5px 0; line-height:1.35; }
+.wiki-toc li.level-3 { padding-left:16px; font-size:13px; }
+.wiki-toc a, .wiki-side a { color:#087bb8; text-decoration:none; }
+.wiki-toc a:hover, .wiki-side a:hover { text-decoration:underline; }
+.wiki-content { min-width:0; background:#fff; border:1px solid #cbd3da; padding:38px 44px 56px; }
+.wiki-content main > h1:first-child { margin-top:0; font-size:38px; border-bottom:2px solid #aeb8c1; padding-bottom:12px; }
+.wiki-content h2 { border-bottom:1px solid #aeb8c1; font-size:28px; margin-top:38px; }
+.wiki-content h3 { font-size:20px; }
+.wiki-content a { color:#087bb8; font-weight:600; }
+.wiki-content a.wiki-doc-path code { color:inherit; }
+.wiki-content main > h3 + ul li { margin:3px 0; }
+.wiki-all-pages h3.toc-group { font-size:14px; margin:12px 0 4px; color:#5b6670; }
+.wiki-all-pages p.toc-more { font-size:13px; color:#5b6670; margin:6px 0 0; }
+.wiki-side { color:#4e5961; }
+.wiki-side p { margin:7px 0 14px; line-height:1.4; }
+.wiki-side .related { margin:0; padding-left:18px; }
+.docs-wiki-nav { display:none; }
+@media (max-width:900px) {
+  .wiki-global { padding:0 18px; gap:16px; overflow-x:auto; }
+  .wiki-tools { padding:16px 18px; min-height:60px; }
+  .wiki-layout { display:block; margin:12px auto 32px; padding:0 18px; }
+  .wiki-toc, .wiki-side { position:static; margin:18px 0; }
+  .wiki-content { padding:28px 24px 38px; }
+}
+</style>
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js" integrity="sha384-o+g/BxPwhi0C3RK7oQBxQuNimeafQ3GE/ST4iT2BxVI4Wzt60SH4pq9iXVYujjaS" crossorigin="anonymous"></script>
+<script>document.addEventListener('DOMContentLoaded', async () => {
+  if (!window.mermaid) return;
+  window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
+  for (const code of document.querySelectorAll('pre > code.language-mermaid')) {
+    const original = code.parentElement;
+    const diagram = document.createElement('div');
+    diagram.className = 'mermaid';
+    diagram.textContent = code.textContent;
+    original.replaceWith(diagram);
+    try {
+      await window.mermaid.run({ nodes: [diagram] });
+    } catch {
+      diagram.replaceWith(original);
+    }
+  }
+});
+</script>
+</head>
+<body>
+<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#바뀌지-않는-원칙">바뀌지 않는 원칙</a></li><li class="level-2"><a href="#고객마다-정하는-것">고객마다 정하는 것</a></li><li class="level-2"><a href="#환경-프로필-적기">환경 프로필 적기</a></li><li class="level-2"><a href="#착수-합의에서-판정하기">착수 합의에서 판정하기</a></li><li class="level-2"><a href="#검증된-조합">검증된 조합</a></li></ul></aside><article class="page wiki-content">
+<header><h1 id="page-title">환경 프로필</h1></header>
+<main>
+<h1 id="환경-프로필">환경 프로필</h1>
+<blockquote class="reading-guide"><strong>읽기 안내</strong> — 누가: 착수 합의를 하는 PM과 FDE ·
+언제: 고객의 개발 환경을 확인하고 NEXI로 할 수 있는지 판정할 때 ·
+읽은 뒤: 착수 합의에서 항목마다 값을 정하고 판정한다. 정한 값은 <code>AGENTS.md</code>에 남긴다.</blockquote>
+<p>NEXI는 어느 고객에게서나 같은 원칙으로 일한다. 고객마다 다른 것은 개발 환경이다. 협업 서비스, 쓸 수 있는 AI, 데이터를 밖으로 보내도
+되는지 같은 것이다. 이 값을 고객마다 정해 두는 것이 환경 프로필이다. 원칙을 지킬 수 없는 환경이면 원칙을 빼지 않고, 그 고객에게는
+적합하지 않다고 판정한다.</p>
+<h2 id="바뀌지-않는-원칙">바뀌지 않는 원칙</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>원칙</th>
+<th>환경이 내줘야 하는 것</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>요구사항, 작업 계약서와 디자인 기준, 최종 보고는 사람이 승인한다</td>
+<td>승인을 기록할 저장소, 누가 승인했는지 가릴 계정</td>
+</tr>
+<tr>
+<td>작업은 하루 이하이고, 선행 작업이 수용된 뒤 시작한다</td>
+<td>이슈와 그 상태를 읽을 수 있는 협업 서비스</td>
+</tr>
+<tr>
+<td>새 동작은 그 기준에서 먼저 실패하는 검사로, 이미 있던 동작은 기준선 실행과 함께 회귀 검사로 확인한다. 마지막 변경 뒤 모두 통과한다. 디자인 시스템 작업부터의 화면 작업은 승인된 디자인 기준과 스크린샷으로 확인한다</td>
+<td>이 프로젝트의 검사를 돌릴 실행 환경, 화면 작업이면 브라우저</td>
+</tr>
+<tr>
+<td>구현한 agent와 다른 agent가 읽기 전용으로 리뷰하고, 판정을 원문 그대로 기록한다</td>
+<td>서로 다른 agent 둘, 리뷰 agent의 읽기 전용 실행</td>
+</tr>
+<tr>
+<td>리뷰한 내용 그대로 <code>main</code>에 들어가고 이슈가 닫혀야 수용이다</td>
+<td>리뷰한 head를 확인하며 병합하고 그 결과를 확인할 수 있는 협업 서비스</td>
+</tr>
+<tr>
+<td>끝낼 때 새 사본에서 설치부터 검사까지 다시 돌린다</td>
+<td>새 사본을 받아 돌릴 수 있는 환경</td>
+</tr>
+<tr>
+<td>비밀 값은 저장소 밖에 둔다</td>
+<td>저장소 밖에서 설정을 준비할 방법</td>
+</tr>
+</tbody></table></div>
+<p>예외는 하나다. 리뷰를 맡을 다른 agent를 쓸 수 없을 때(예: 사용 한도), 사람이 고르면 같은 agent가 따로 연 읽기 전용 세션에서 리뷰한다. 다만 데이터를 지우거나 덮어쓰는 변경, 권한과 역할을 바꾸는 변경, 기존 데이터를 옮기는 변경, 프로젝트 밖의 데이터나 서비스에 닿을 수 있는 명령은 같은 agent 리뷰로 수용하지 않는다. 다른 agent를 다시 쓸 수 있을 때까지 기다린다.
+판정에 그 사실과 이유가 남는다.</p>
+<h2 id="고객마다-정하는-것">고객마다 정하는 것</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+<th>어디에 정하나</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>방식</td>
+<td>혼자, 팀</td>
+<td>환경 프로필(<code>Mode:</code>)</td>
+</tr>
+<tr>
+<td>협업 서비스</td>
+<td>GitHub, 설치형 GitLab</td>
+<td>환경 프로필(<code>Forge:</code>, <code>Forge-Host:</code>)</td>
+</tr>
+<tr>
+<td>agent 조합</td>
+<td>Claude Code 구현과 Codex 리뷰, 또는 그 반대</td>
+<td>환경 프로필(<code>Agents:</code>)</td>
+</tr>
+<tr>
+<td>데이터 반출</td>
+<td>클라우드 AI에 코드와 문서를 보내도 되는가</td>
+<td>환경 프로필(<code>Data:</code>)</td>
+</tr>
+<tr>
+<td>네트워크</td>
+<td>개발 PC가 협업 서비스, AI 서비스, 패키지 저장소에 닿는가</td>
+<td>착수 합의에서 확인한다</td>
+</tr>
+<tr>
+<td>스택과 외부 시스템</td>
+<td>언어, 로컬과 외부 시스템</td>
+<td>요구사항 결정 문서(<a href="../start/02_REQUIREMENTS.html">요구사항</a>)</td>
+</tr>
+<tr>
+<td>모델</td>
+<td>리뷰 모델(기본 <code>gpt-6-astra</code>), 구현 모델</td>
+<td>각 도구의 설정. 판정과 증거에 실제로 쓴 모델이 남는다</td>
+</tr>
+<tr>
+<td>agent 권한</td>
+<td>각 도구의 권한 설정</td>
+<td>각 사람이 자기 도구에서 정한다</td>
+</tr>
+</tbody></table></div>
+<p>정해져 있어 바꿀 수 없는 것도 있다.</p>
+<ul>
+<li>검사 명령의 이름: <code>make build</code>, <code>make test</code>, <code>make lint</code>, <code>make screenshots</code>. 프로젝트가 이 이름 아래 실제 명령을 묶는다.</li>
+<li>문서의 상태 표시와 차례 알림: 한국어(<code>상태: 초안</code>, <code>상태: 승인</code> 등). 다른 언어는 지원하지 않는다.</li>
+<li>운영체제: macOS와 Linux. Windows로 돌린 기록은 없다.</li>
+</ul>
+<h2 id="환경-프로필-적기">환경 프로필 적기</h2>
+<p>착수 합의에서 정한 값을 <code>/nexi-init</code>에 넣으면 <code>AGENTS.md</code>에 적힌다. <code>Mode:</code>와 팀이면 <code>PM:</code> 줄은 &quot;What this is&quot; 다음에, 나머지는
+<code>## 환경</code> 절에 한 줄씩 들어간다.</p>
+<pre><code class="language-text">/nexi-init &lt;프로젝트 이름&gt; [team] [forge=github] [agents=claude-code+codex] [data=cloud-ok]
+</code></pre>
+<p>넣지 않은 값은 기본값이다. 이미 있는 저장소에서는 <code>/nexi-init</code>이 <code>AGENTS.md</code>를 고치지 않으므로, 아래 절을 직접 더하고 저장소의
+원래 절차로 <code>main</code>에 넣는다.</p>
+<pre><code class="language-text">## 환경
+Forge: github | gitlab
+Forge-Host: &lt;GitLab 주소. GitHub면 적지 않는다&gt;
+Agents: claude-code+codex | codex+claude-code
+Data: cloud-ok | internal-only
+</code></pre>
+<ul>
+<li>줄이 없으면 지금의 기본값이다. <code>Forge: github</code>, <code>Data: cloud-ok</code>이고, <code>Agents:</code>가 없으면 어느 쪽이 구현하든 다른 쪽이 리뷰한다.</li>
+<li>모든 skill이 시작할 때 이 절을 확인한다. 같은 줄이 둘이거나, 값이 비었거나, <code>Forge:</code>와 <code>Data:</code>가 목록에 없는 값이면 아무것도 바꾸지 않고 멈춘다. 고친 뒤 같은 프롬프트를 다시 넣는다.</li>
+<li><code>Data: internal-only</code>이면 모든 skill이 멈춘다. 지금 키트가 다루는 agent 조합은 모두 클라우드 AI를 쓰기 때문이다.</li>
+<li><code>Agents:</code>가 있으면 맡은 쪽이 아닌 agent가 구현이나 리뷰를 하려 할 때 멈춘다. 리뷰 agent를 쓸 수 없어 사람이 같은 agent 리뷰를 고른 경우는 허용한다. <code>nexi-run</code>은 <code>claude-code+codex</code>일 때만 돈다. 목록에 없는 <code>Agents:</code> 값이면 <code>nexi-init</code>, <code>nexi-implement</code>, <code>nexi-review</code>, <code>nexi-run</code>이 멈춘다(어댑터가 필요하다). 다른 skill은 그대로 돈다.</li>
+<li><code>Forge: gitlab</code>이면 어댑터(P#251)가 나오기 전까지 모든 skill이 멈춘다.</li>
+</ul>
+<h2 id="착수-합의에서-판정하기">착수 합의에서 판정하기</h2>
+<p>항목마다 고객의 값을 정하고, 아래 표와 다음 절의 조합을 보고 넷 가운데 하나로 판정한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>판정</th>
+<th>뜻</th>
+<th>다음</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>검증됨</td>
+<td>그 값의 조합을 실제로 끝까지 돌린 기록이 있고, 빠진 단계가 없다</td>
+<td>진행한다</td>
+</tr>
+<tr>
+<td>지원하지만 검증 안 됨</td>
+<td>키트가 그 값을 지원하지만 이 조합으로 끝까지 돌린 기록이 없거나, 기록에 빠진 단계가 있다(부분 검증)</td>
+<td>고객에게 그대로 알리고, 첫 작업들을 검증으로 다룬다</td>
+</tr>
+<tr>
+<td>어댑터가 필요하다</td>
+<td>원칙에 필요한 것을 환경이 내줄 수 있지만, 키트가 그 값을 아직 다루지 못한다</td>
+<td>어댑터 계획과 견적을 낸다. 어댑터가 나오기 전에는 시작하지 않는다</td>
+</tr>
+<tr>
+<td>적합하지 않다</td>
+<td>원칙에 필요한 것을 환경이 내줄 수 없다. 예: 판정을 기록할 저장소가 없다, 검사를 돌릴 환경이 없다</td>
+<td>시작하지 않는다</td>
+</tr>
+</tbody></table></div>
+<p>데이터를 밖으로 보낼 수 없는 고객(<code>Data: internal-only</code>)에게는 지금 키트가 다루는 agent 조합이 모두 클라우드 AI를 쓴다. 그래서 agent
+조합 항목이 &quot;어댑터가 필요하다&quot;가 된다.</p>
+<h2 id="검증된-조합">검증된 조합</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>방식</th>
+<th>협업 서비스</th>
+<th>agent 조합</th>
+<th>판정</th>
+<th>기록</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>혼자</td>
+<td>GitHub</td>
+<td>Claude Code 구현, Codex 리뷰</td>
+<td>지원하지만 검증 안 됨(부분 검증)</td>
+<td>새 프로젝트는 &quot;혼자 CRM 만들어 보기&quot; 예제대로 빈 저장소에서 최종 보고 승인까지 사람이 대화형으로 끝냈다. 둘러보기 결과 칸은 비어 있었고, 새 사본에서 실행 명령은 돌리지 않았으며(고객 수용으로 승인), 앞쪽 작업 일부는 이전 규칙으로 수용됐다. 작업 여덟 개는 같은 agent 리뷰를 받았다. 레거시 전환 예제(내부 문서 <code>CRM_MIGRATION_RUN_RECORD</code>)는 headless 실행으로 최종 보고 승인까지 했고, 앱을 띄워 써 보기, 끝내기의 스크린샷과 새 사본 검사 일부는 돌리지 않았다. 멈췄다 이어 하기, 디자인 변경, 끝내기 거절은 아직 돌리지 않았다</td>
+</tr>
+<tr>
+<td>팀</td>
+<td>GitHub</td>
+<td>Claude Code 구현, Codex 리뷰</td>
+<td>지원하지만 검증 안 됨(부분 검증)</td>
+<td>한 머신의 사본 다섯으로 인계, 리뷰, 병합을 확인했다. 사람마다 계정과 컴퓨터가 다른 실행과 끝내기까지 간 실행은 아직 없다. 그래서 PM만 할 수 있는 일을 다른 사람이 하려 할 때 멈추는지, <code>main</code>이 움직인 뒤 다시 리뷰하는지는 검증되지 않았다</td>
+</tr>
+<tr>
+<td>혼자, 팀</td>
+<td>GitHub</td>
+<td>Codex 구현, Claude Code 리뷰</td>
+<td>지원하지만 검증 안 됨</td>
+<td><a href="../how-to/CODEX_PRIMARY.html">Codex를 주 agent로</a>. <code>nexi-run</code>은 쓸 수 없다</td>
+</tr>
+<tr>
+<td>혼자, 팀</td>
+<td>GitHub</td>
+<td>CuCu 구현</td>
+<td>어댑터가 필요하다</td>
+<td>지원 계획이 있다(P#275). 지금 키트의 환경 확인은 CuCu를 받지 않는다</td>
+</tr>
+<tr>
+<td>혼자, 팀</td>
+<td>설치형 GitLab</td>
+<td>아무것</td>
+<td>어댑터가 필요하다</td>
+<td>어댑터 계획이 있다(P#251)</td>
+</tr>
+<tr>
+<td>혼자, 팀</td>
+<td>아무것</td>
+<td>클라우드 AI를 쓰지 않는 조합</td>
+<td>어댑터가 필요하다</td>
+<td>없음</td>
+</tr>
+</tbody></table></div>
+
+</main>
+</article><aside class="wiki-side" aria-label="이 칸"><h2>이 칸</h2><ul class="related"><li><a href="../../index.html#sec-reference">참조 목록</a></li><li><a href="../../index.html">문서 홈</a></li></ul></aside></div>
+</body>
+</html>

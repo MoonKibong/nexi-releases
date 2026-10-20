@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>인수인계</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; color: #1f2933; line-height: 1.7; }
+h1, h2, h3 { line-height: 1.3; }
+a { color: #155e75; }
+pre { padding: 16px; overflow-x: auto; background: #0f172a; color: #e5e7eb; border-radius: 6px; }
+code { font-family: ui-monospace, monospace; font-size: .9em; }
+pre code { white-space: pre; }
+blockquote { margin: 16px 0; padding: 8px 16px; border-left: 4px solid #1793d1; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 12px; border: 1px solid #d7dde5; text-align: left; vertical-align: top; }
+th { background: #eef4f7; }
+.mermaid { overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+@media (max-width: 760px) { body { font-size: 15px; } table { min-width: 620px; } }
+</style>
+<style id="practice-wiki-shell">
+.wiki-content ol + pre, .wiki-content ol + .table-scroll { margin-left:2.2em; }
+.wiki-content blockquote.wiki-alert { border-left:4px solid #1793d1; background:#eef6fb; color:#1f2933; padding:10px 14px; margin:16px 0; }
+.wiki-content blockquote.wiki-alert .wiki-alert-title { display:block; font-weight:700; margin-bottom:4px; }
+.wiki-content blockquote.wiki-alert-tip { border-left-color:#1a7f37; background:#eef8f0; }
+.wiki-content blockquote.wiki-alert-important { border-left-color:#8250df; background:#f5f0fd; }
+.wiki-content blockquote.wiki-alert-warning { border-left-color:#bf8700; background:#fff8e5; }
+.wiki-content blockquote.reading-guide { border-left:4px solid #1793d1; background:#eef6fb; color:#45525e; font-size:14px; line-height:1.6; padding:8px 14px; margin:0 0 22px; }
+body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+.page { max-width:none; width:100%; margin:0; padding:0; border:0; box-shadow:none; background:transparent; }
+.page > header { display:none; }
+.wiki-global { height:48px; background:#2e2e2e; border-bottom:5px solid #1793d1; color:#fff; display:flex; align-items:center; padding:0 calc((100% - 1840px)/2 + 42px); gap:28px; }
+.wiki-global strong { color:#fff; font-size:15px; letter-spacing:.02em; white-space:nowrap; }
+.wiki-global a { color:#d8d8d8; text-decoration:none; font-size:14px; font-weight:700; }
+.wiki-global a:hover, .wiki-global a:focus, .wiki-global a[aria-current] { color:#fff; text-decoration:underline; }
+.wiki-tools { max-width:1840px; margin:auto; min-height:76px; padding:18px 42px; display:flex; align-items:center; gap:18px; }
+.wiki-tools .crumb { color:#5b6770; font-size:14px; }
+.wiki-tools .home-link { margin-left:auto; color:#087bb8; font-weight:700; text-decoration:none; }
+.audience-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; }
+.audience-internal { background:#5d4037; color:#fff; }
+.audience-client { background:#156f3c; color:#fff; }
+.audience-unspecified { background:#e7ebee; color:#46525a; }
+.asset-badges { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; }
+.asset-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; background:#e9eff4; color:#25465c; }
+.asset-badge.status-reviewed { background:#156f3c; color:#fff; }
+.asset-badge.status-candidate { background:#755b16; color:#fff; }
+.wiki-all-pages { margin-top:46px; padding-top:18px; border-top:2px solid #aeb8c1; }
+.wiki-all-pages details { margin:8px 0; }
+.wiki-all-pages summary { cursor:pointer; color:#087bb8; font-weight:700; }
+.wiki-all-pages ul { margin:7px 0 14px; }
+.wiki-layout { max-width:1840px; margin:28px auto 52px; padding:0 42px; display:grid; grid-template-columns:250px minmax(0, 1fr) 230px; gap:34px; align-items:start; }
+.wiki-toc, .wiki-side { font-size:14px; position:sticky; top:20px; }
+.wiki-toc h2, .wiki-side h2 { font-size:16px; margin:0 0 10px; padding:0 0 9px; border-bottom:1px solid #c8d0d7; }
+.wiki-toc ul { list-style:none; margin:0; padding:0; }
+.wiki-toc li { margin:0; padding:5px 0; line-height:1.35; }
+.wiki-toc li.level-3 { padding-left:16px; font-size:13px; }
+.wiki-toc a, .wiki-side a { color:#087bb8; text-decoration:none; }
+.wiki-toc a:hover, .wiki-side a:hover { text-decoration:underline; }
+.wiki-content { min-width:0; background:#fff; border:1px solid #cbd3da; padding:38px 44px 56px; }
+.wiki-content main > h1:first-child { margin-top:0; font-size:38px; border-bottom:2px solid #aeb8c1; padding-bottom:12px; }
+.wiki-content h2 { border-bottom:1px solid #aeb8c1; font-size:28px; margin-top:38px; }
+.wiki-content h3 { font-size:20px; }
+.wiki-content a { color:#087bb8; font-weight:600; }
+.wiki-content a.wiki-doc-path code { color:inherit; }
+.wiki-content main > h3 + ul li { margin:3px 0; }
+.wiki-all-pages h3.toc-group { font-size:14px; margin:12px 0 4px; color:#5b6670; }
+.wiki-all-pages p.toc-more { font-size:13px; color:#5b6670; margin:6px 0 0; }
+.wiki-side { color:#4e5961; }
+.wiki-side p { margin:7px 0 14px; line-height:1.4; }
+.wiki-side .related { margin:0; padding-left:18px; }
+.docs-wiki-nav { display:none; }
+@media (max-width:900px) {
+  .wiki-global { padding:0 18px; gap:16px; overflow-x:auto; }
+  .wiki-tools { padding:16px 18px; min-height:60px; }
+  .wiki-layout { display:block; margin:12px auto 32px; padding:0 18px; }
+  .wiki-toc, .wiki-side { position:static; margin:18px 0; }
+  .wiki-content { padding:28px 24px 38px; }
+}
+</style>
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js" integrity="sha384-o+g/BxPwhi0C3RK7oQBxQuNimeafQ3GE/ST4iT2BxVI4Wzt60SH4pq9iXVYujjaS" crossorigin="anonymous"></script>
+<script>document.addEventListener('DOMContentLoaded', async () => {
+  if (!window.mermaid) return;
+  window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
+  for (const code of document.querySelectorAll('pre > code.language-mermaid')) {
+    const original = code.parentElement;
+    const diagram = document.createElement('div');
+    diagram.className = 'mermaid';
+    diagram.textContent = code.textContent;
+    original.replaceWith(diagram);
+    try {
+      await window.mermaid.run({ nodes: [diagram] });
+    } catch {
+      diagram.replaceWith(original);
+    }
+  }
+});
+</script>
+</head>
+<body>
+<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-how-to" aria-current="true">하는 법</a><a href="../../index.html#sec-reference">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 하는 법</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#넘기는-순서">넘기는 순서</a></li><li class="level-2"><a href="#끝낼-때-넘기는-것">끝낼 때 넘기는 것</a></li><li class="level-2"><a href="#배운-것을-남긴다">배운 것을 남긴다</a></li></ul></aside><article class="page wiki-content">
+<header><h1 id="page-title">인수인계</h1></header>
+<main>
+<h1 id="인수인계">인수인계</h1>
+<blockquote class="reading-guide"><strong>읽기 안내</strong> — 누가: PM, FDE, 고객 기술 리드, Practice Lead ·
+언제: 고객에게 넘기기 시작할 때(마지막 주가 아니라 셋째 이터레이션부터), 프로젝트를 닫을 때 ·
+읽은 뒤: 고객이 혼자 작업한 기록을 모으고, 결과를 항목별로 보고하고, 배운 것을 다음 프로젝트에 남긴다.</blockquote>
+<p>넘겼는지는 고객이 우리 도움 없이 작업한 기록으로 판단한다. 교육에 참석한 것으로는 판단하지 않는다. 넘기는 것은 일하는 방식, 곧
+NEXI 키트와 작업 흐름과 기록하는 습관이다.</p>
+<h2 id="넘기는-순서">넘기는 순서</h2>
+<ol>
+<li>우리 팀이 먼저 스스로 돌아가게 한다. AI·하네스 운영자가 없는 날에도 작업이 끝까지 가야 한다.</li>
+<li>고객이 본다. 고객이 작업 하나의 작업 계약서, 구현, 리뷰, 병합을 옆에서 본다.</li>
+<li>같이 한다. 고객과 FDE가 역할을 나눠 한다. 질문과 막힌 곳은 문서의 결함으로 적는다.</li>
+<li>고객이 혼자 한다. 고객이 문서와 키트만으로 위험이 낮은 작업 하나를 고르고, 작업 계약서를 쓰고, 구현하고, 리뷰받고, 병합한다. FDE는 안전 때문에 멈춰야 할 때만 끼어든다. 걸린 시간, 도움을 청한 곳, 개입한 곳을 모두 적는다.</li>
+<li>고객이 운영한다. 작업 접수, 리뷰, 측정, 막힌 일을 올리는 것까지 고객이 하고, FDE는 일부만 골라 확인한다.</li>
+</ol>
+<p>옆에서 설명하고 싶어도 참는다. 설명하면 고객이 혼자 하는 데 걸린 시간을 잴 수 없다. 막히면 설명하지 말고 문서를 고친다. 고객이 혼자
+해야 할 기간과 건수는 착수 합의에서 정한다.</p>
+<h2 id="끝낼-때-넘기는-것">끝낼 때 넘기는 것</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>넘기는 것</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>합의 범위의 결과물</td>
+<td><a href="../start/07_FINISH.html">끝내기</a>의 최종 보고가 승인됐고, 남은 중대 결함이 없다</td>
+</tr>
+<tr>
+<td>항목별 평가</td>
+<td>동작하는가, 검증하고 다시 낼 수 있는가, 돈과 시간이 덜 드는가, 고객이 혼자 운영할 수 있는가를 따로 판정한다. 미달은 미달로 적는다</td>
+</tr>
+<tr>
+<td>측정 기록</td>
+<td>다음 견적의 입력이다(<a href="COST.html">비용과 시간</a>)</td>
+</tr>
+<tr>
+<td>실패와 고친 기록</td>
+<td>다음 프로젝트의 재료다</td>
+</tr>
+<tr>
+<td>권한과 담당자</td>
+<td>운영, 자격 증명, 배포 권한이 고객에게 넘어갔다</td>
+</tr>
+<tr>
+<td>남은 위험과 후속 계획</td>
+<td>담당자와 기한이 있다</td>
+</tr>
+</tbody></table></div>
+<p>넘기는 것은 <a href="../reference/FORMS.html#%EC%9D%B8%EC%88%98%EC%9D%B8%EA%B3%84%EC%99%80-%EC%B5%9C%EC%A2%85-%ED%8F%89%EA%B0%80">인수인계와 최종 평가 양식</a>에 적는다. 고객에게는 달성한 것, 증거, 불확실한 점, 남은 위험, 다음 결정의 선택지를 짧게 보고한다. 조건이 붙은 결과는 그 조건과 함께 적는다. 미달 항목은 고객이 찾기 전에 먼저 보고한다. 확대할지, 조건을 붙여 확대할지, 보류할지는 고객의 스폰서가 정한다.</p>
+<h2 id="배운-것을-남긴다">배운 것을 남긴다</h2>
+<p>배운 것은 끝날 때 몰아서 정리하지 않는다. 일하는 동안 남긴다(<a href="../start/04_TASK_CYCLE.html#%EB%82%A8%EA%B8%B8-%EA%B2%83">작업 순환의 남길 것</a>).</p>
+<ul>
+<li>실패할 때마다 (<a href="../reference/FORMS.html#%EC%8B%A4%ED%8C%A8-%EA%B8%B0%EB%A1%9D">실패 기록 양식</a>) 날짜, 작업, 증상, 영향, 근거, 원인 추정, 고친 것, 고친 사람, 고친 것을 어떻게 확인했는지, 다시 일어났는지, 기밀 등급을 적는다. 원래의 로그와 재현 조건을 보존한다. 사람을 탓하지 않고 고객 비밀을 옮기지 않는다. 원인은 작업 계약서, 컨텍스트, agent, 도구와 환경, 검사, 리뷰, 아키텍처, 데이터, 보안, 배포 가운데 어디인지 나눈다.</li>
+<li>한 주기를 마칠 때 어떤 결정이 늦었는지, 어떤 증거가 모자랐는지, 실제로 어디서 기다렸는지, 어떤 숫자가 실제보다 좋아 보일 수 있는지, 고객이 혼자 하지 못하게 막은 것이 무엇인지 묻는다. 후속 조치는 담당자와 기한이 있는 변경 한두 개로 끝낸다.</li>
+<li>개선한 방법을 공용 키트나 방법론 문서에 반영하려면, 같은 문제가 되풀이되고 다른 프로젝트에도 맞는다는 근거가 있어야 한다. 작은 변경으로 적용하고 전후의 측정값과 부작용을 잰다. Practice Lead가 근거를 보고 승인하고, 반영한 사람과 버전을 적는다. 효과가 없거나 해로우면 되돌린다. 한 사례에서 본 것을 규칙으로 삼지 않는다.</li>
+</ul>
+<p>회고 문서는 저장소 밖(팀의 문서 공간)에 둔다. <code>main</code>에 넣어야 하면 작업 하나로 만들어 작업 순환대로 넣는다. <code>main</code>에 직접 올리면 키트를 거치지
+않은 commit이 되어, 다음 끝내기가 그 commit에서 멈추고 검토 작업을 요구한다.</p>
+<p>끝낼 때는 주기마다 수용한 작업 수, 첫 리뷰에서 통과한 비율, 작업 하나당 리뷰 시간, 팀이 여럿이었으면 병렬 세금을 갱신한다. 이 값이
+있어야 다음 견적을 짐작이 아니라 잰 값으로 낸다.</p>
+
+</main>
+</article><aside class="wiki-side" aria-label="이 칸"><h2>이 칸</h2><ul class="related"><li><a href="../../index.html#sec-how-to">하는 법 목록</a></li><li><a href="../../index.html">문서 홈</a></li></ul></aside></div>
+</body>
+</html>

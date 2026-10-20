@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>검증 명령 규약</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; color: #1f2933; line-height: 1.7; }
+h1, h2, h3 { line-height: 1.3; }
+a { color: #155e75; }
+pre { padding: 16px; overflow-x: auto; background: #0f172a; color: #e5e7eb; border-radius: 6px; }
+code { font-family: ui-monospace, monospace; font-size: .9em; }
+pre code { white-space: pre; }
+blockquote { margin: 16px 0; padding: 8px 16px; border-left: 4px solid #1793d1; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 12px; border: 1px solid #d7dde5; text-align: left; vertical-align: top; }
+th { background: #eef4f7; }
+.mermaid { overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+@media (max-width: 760px) { body { font-size: 15px; } table { min-width: 620px; } }
+</style>
+<style id="practice-wiki-shell">
+.wiki-content ol + pre, .wiki-content ol + .table-scroll { margin-left:2.2em; }
+.wiki-content blockquote.wiki-alert { border-left:4px solid #1793d1; background:#eef6fb; color:#1f2933; padding:10px 14px; margin:16px 0; }
+.wiki-content blockquote.wiki-alert .wiki-alert-title { display:block; font-weight:700; margin-bottom:4px; }
+.wiki-content blockquote.wiki-alert-tip { border-left-color:#1a7f37; background:#eef8f0; }
+.wiki-content blockquote.wiki-alert-important { border-left-color:#8250df; background:#f5f0fd; }
+.wiki-content blockquote.wiki-alert-warning { border-left-color:#bf8700; background:#fff8e5; }
+.wiki-content blockquote.reading-guide { border-left:4px solid #1793d1; background:#eef6fb; color:#45525e; font-size:14px; line-height:1.6; padding:8px 14px; margin:0 0 22px; }
+body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+.page { max-width:none; width:100%; margin:0; padding:0; border:0; box-shadow:none; background:transparent; }
+.page > header { display:none; }
+.wiki-global { height:48px; background:#2e2e2e; border-bottom:5px solid #1793d1; color:#fff; display:flex; align-items:center; padding:0 calc((100% - 1840px)/2 + 42px); gap:28px; }
+.wiki-global strong { color:#fff; font-size:15px; letter-spacing:.02em; white-space:nowrap; }
+.wiki-global a { color:#d8d8d8; text-decoration:none; font-size:14px; font-weight:700; }
+.wiki-global a:hover, .wiki-global a:focus, .wiki-global a[aria-current] { color:#fff; text-decoration:underline; }
+.wiki-tools { max-width:1840px; margin:auto; min-height:76px; padding:18px 42px; display:flex; align-items:center; gap:18px; }
+.wiki-tools .crumb { color:#5b6770; font-size:14px; }
+.wiki-tools .home-link { margin-left:auto; color:#087bb8; font-weight:700; text-decoration:none; }
+.audience-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; }
+.audience-internal { background:#5d4037; color:#fff; }
+.audience-client { background:#156f3c; color:#fff; }
+.audience-unspecified { background:#e7ebee; color:#46525a; }
+.asset-badges { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; }
+.asset-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; background:#e9eff4; color:#25465c; }
+.asset-badge.status-reviewed { background:#156f3c; color:#fff; }
+.asset-badge.status-candidate { background:#755b16; color:#fff; }
+.wiki-all-pages { margin-top:46px; padding-top:18px; border-top:2px solid #aeb8c1; }
+.wiki-all-pages details { margin:8px 0; }
+.wiki-all-pages summary { cursor:pointer; color:#087bb8; font-weight:700; }
+.wiki-all-pages ul { margin:7px 0 14px; }
+.wiki-layout { max-width:1840px; margin:28px auto 52px; padding:0 42px; display:grid; grid-template-columns:250px minmax(0, 1fr) 230px; gap:34px; align-items:start; }
+.wiki-toc, .wiki-side { font-size:14px; position:sticky; top:20px; }
+.wiki-toc h2, .wiki-side h2 { font-size:16px; margin:0 0 10px; padding:0 0 9px; border-bottom:1px solid #c8d0d7; }
+.wiki-toc ul { list-style:none; margin:0; padding:0; }
+.wiki-toc li { margin:0; padding:5px 0; line-height:1.35; }
+.wiki-toc li.level-3 { padding-left:16px; font-size:13px; }
+.wiki-toc a, .wiki-side a { color:#087bb8; text-decoration:none; }
+.wiki-toc a:hover, .wiki-side a:hover { text-decoration:underline; }
+.wiki-content { min-width:0; background:#fff; border:1px solid #cbd3da; padding:38px 44px 56px; }
+.wiki-content main > h1:first-child { margin-top:0; font-size:38px; border-bottom:2px solid #aeb8c1; padding-bottom:12px; }
+.wiki-content h2 { border-bottom:1px solid #aeb8c1; font-size:28px; margin-top:38px; }
+.wiki-content h3 { font-size:20px; }
+.wiki-content a { color:#087bb8; font-weight:600; }
+.wiki-content a.wiki-doc-path code { color:inherit; }
+.wiki-content main > h3 + ul li { margin:3px 0; }
+.wiki-all-pages h3.toc-group { font-size:14px; margin:12px 0 4px; color:#5b6670; }
+.wiki-all-pages p.toc-more { font-size:13px; color:#5b6670; margin:6px 0 0; }
+.wiki-side { color:#4e5961; }
+.wiki-side p { margin:7px 0 14px; line-height:1.4; }
+.wiki-side .related { margin:0; padding-left:18px; }
+.docs-wiki-nav { display:none; }
+@media (max-width:900px) {
+  .wiki-global { padding:0 18px; gap:16px; overflow-x:auto; }
+  .wiki-tools { padding:16px 18px; min-height:60px; }
+  .wiki-layout { display:block; margin:12px auto 32px; padding:0 18px; }
+  .wiki-toc, .wiki-side { position:static; margin:18px 0; }
+  .wiki-content { padding:28px 24px 38px; }
+}
+</style>
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js" integrity="sha384-o+g/BxPwhi0C3RK7oQBxQuNimeafQ3GE/ST4iT2BxVI4Wzt60SH4pq9iXVYujjaS" crossorigin="anonymous"></script>
+<script>document.addEventListener('DOMContentLoaded', async () => {
+  if (!window.mermaid) return;
+  window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });
+  for (const code of document.querySelectorAll('pre > code.language-mermaid')) {
+    const original = code.parentElement;
+    const diagram = document.createElement('div');
+    diagram.className = 'mermaid';
+    diagram.textContent = code.textContent;
+    original.replaceWith(diagram);
+    try {
+      await window.mermaid.run({ nodes: [diagram] });
+    } catch {
+      diagram.replaceWith(original);
+    }
+  }
+});
+</script>
+</head>
+<body>
+<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#1-검증-명령이-갖출-요건">1. 검증 명령이 갖출 요건</a></li><li class="level-3"><a href="#수용-기준과-경계-조건">수용 기준과 경계 조건</a></li><li class="level-2"><a href="#2-red-확인--실패했다가-아니라-맞는-이유로-실패했다">2. red 확인 — &quot;실패했다&quot;가 아니라 &quot;맞는 이유로 실패했다&quot;</a></li><li class="level-2"><a href="#3-강도-시험--뮤테이션-확인">3. 강도 시험 — 뮤테이션 확인</a></li><li class="level-2"><a href="#4-검증이-산출물을-비껴가는-두-가지-방식">4. 검증이 산출물을 비껴가는 두 가지 방식</a></li><li class="level-3"><a href="#4-a-자기-사본을-검증한다">4-A. 자기 사본을 검증한다</a></li><li class="level-3"><a href="#4-b-대표-사례만-본다">4-B. 대표 사례만 본다</a></li><li class="level-2"><a href="#5-검증-수단이-없을-때--계층-선택">5. 검증 수단이 없을 때 — 계층 선택</a></li><li class="level-2"><a href="#6-금지-패턴">6. 금지 패턴</a></li><li class="level-3"><a href="#실패-신호">실패 신호</a></li><li class="level-2"><a href="#7-작업-계약-작성-체크리스트">7. 작업 계약 작성 체크리스트</a></li></ul></aside><article class="page wiki-content">
+<header><h1 id="page-title">검증 명령 규약</h1></header>
+<main>
+<h1 id="검증-명령-규약">검증 명령 규약</h1>
+<blockquote class="reading-guide"><strong>읽기 안내</strong> — 누가: 작업 계약서를 쓰는 FDE, 승인하는 PM, 구현하는 개발자, 리뷰를 확인하는 검토자 ·
+언제: 작업 계약서의 검증 명령을 정하거나 승인하기 전 ·
+읽은 뒤: 명령이 요건을 갖췄는지 7절 체크리스트로 확인하고, 약한 부분을 고친다.</blockquote>
+<p>작업 하나(<code>T#</code>)에는 검증 명령이 하나 이상 붙는다. 작업 계약서의 <code>## 검증 명령</code>에 적는 이 명령이 그 작업이 끝났는지를 판단하는
+근거다. <strong>명령이 약하면 agent가 만든 결과를 판단할 수단이 없다.</strong></p>
+<p>FDE가 <code>/nexi-contract</code>로 작업 계약서를 쓸 때 검증 명령도 함께 정하고, PM이 승인한다. 구현할 때 <code>/nexi-implement</code>가 새 검사마다
+실패(red)와 통과(green)를 <code>docs/evidence/T&lt;N&gt;.md</code>에 남긴다. 이미 있던 동작을 지키는 검사는 <code>regression</code>, 이 작업이 더하는 동작의
+검사는 <code>new</code>로 적힌다. 리뷰는 수용 기준과 검사 결과가 실제로 이어지는지 본다.</p>
+<h2 id="1-검증-명령이-갖출-요건">1. 검증 명령이 갖출 요건</h2>
+<p>다섯 가지를 모두 갖춰야 작업 계약에 넣을 수 있다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>요건</th>
+<th>왜</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>종료코드로 판단한다</strong></td>
+<td>사람이 로그를 읽어 판단하면 자동화가 끊기고 라운드마다 사람이 병목이 된다</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>변경 전 탐지력을 확인한다</strong></td>
+<td>새 기능·결함 수정은 의도한 이유의 red를 확인한다. 기존 동작을 지키는 작업(마이그레이션·리팩터링)은 비교 기준이 되는 통과 결과를 남기고 뮤테이션 확인(3절)을 반드시 한다</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>빠른 피드백 시간이 합의돼 있다</strong></td>
+<td>빠른 작업별 검사와 긴 전체 회귀 검사를 나누고, 각각 언제 실행할지 작업 계약에 적는다. 빠른 검사의 기본 상한은 10분이다</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>대상 코드를 실제로 실행하거나 검사한다</strong></td>
+<td>테스트가 자기 사본을 검증하면 산출물은 검증되지 않는다 (4절)</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>결정론적이다</strong></td>
+<td>시간·네트워크·순서에 의존하면 실패가 신호가 아니라 잡음이 된다</td>
+</tr>
+</tbody></table></div>
+<p>7절 체크리스트로 작업 계약서를 승인하기 전과 구현한 뒤에 요건을 확인한다. 1번은 6절의 종료코드 금지 패턴에 걸리지 않는지 본다.
+2번은 2절(red 확인)과 3절(뮤테이션 확인), 4번은 4-A절의 방법으로 확인한다.</p>
+<h3 id="수용-기준과-경계-조건">수용 기준과 경계 조건</h3>
+<p>수용 기준마다 단언이나 점검 근거를 하나 이상 잇는다. 정상 경로가 통과했다는 것은 모든 수용 기준을 충족했다는 뜻이 아니다. 경계
+조건은 위험에 맞게 고른다. 조인과 건수, null과 빈 값, 날짜와 시간대, 반올림, 권한, 페이지 나눔, 중복 전달이 흔한 경계다.</p>
+<p>기능 검사가 통과해도 성능, 보안, 접근성, 관측성, 복구 가능성은 따로다. 작업마다 무거운 시험을 붙이지 않고, 품질 요구와 배포 위험에
+맞춰 성능 예산, 보안 스캔, 접근성 점검, 로그·메트릭·알림, 복구 시험을 배포 계획에 넣는다. 담당자와 임계값을 정한다.</p>
+<h2 id="2-red-확인--실패했다가-아니라-맞는-이유로-실패했다">2. red 확인 — &quot;실패했다&quot;가 아니라 &quot;맞는 이유로 실패했다&quot;</h2>
+<p>새 기능·결함 수정에서 red를 볼 때 <strong>실패 메시지를 읽는다.</strong> 의도한 부재 때문에 실패해야 한다. 기존 동작을 보존하는 작업에서는 변경 전 통과 결과를 남기고, 별도 작업 공간에서 의도적으로 오류를 넣는다(3절).</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>red의 이유</th>
+<th>판단</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>검증 대상이 없거나 값이 틀리다</td>
+<td><strong>조건을 갖췄다</strong> — 이 명령은 그것을 본다</td>
+</tr>
+<tr>
+<td>import 오류, 설정 오류, 목 실패</td>
+<td><strong>조건을 갖추지 못했다</strong> — 배선이 안 됐다. 고치고 다시 red를 본다</td>
+</tr>
+<tr>
+<td>파일 없음, 명령 없음</td>
+<td><strong>조건을 갖추지 못했다</strong> — 환경 문제다</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>참조 예시 작업 (CRM 참고 예시, 2026-09-29).</strong> 이 작업은 리드 목록 조회 결과에 담당 팀 이름(<code>teamName</code>)을 더한 작업이다.
+red를 확인했을 때 실패 이유는
+<code>expected { id: 1, … } to have property &quot;teamName&quot;</code> 였다. 즉 <code>teamName</code> <strong>부재</strong> 때문이다.
+만약 <code>vi.mock</code> 배선이 잘못돼 import 오류로 실패했다면 그 red는 무의미했다. 실패 메시지를 읽지
+않으면 이 둘을 구별할 수 없다.</p>
+</blockquote>
+<h2 id="3-강도-시험--뮤테이션-확인">3. 강도 시험 — 뮤테이션 확인</h2>
+<p>red만으로는 부족하다. <strong>산출물에 일부러 오류를 넣고 명령이 탐지하는지 본다.</strong> 비용이 적게 들고, 한 번만 해도
+약한 검증을 드러낼 수 있다. 기존 동작을 지키는 작업(마이그레이션·리팩터링)에서는 필수다. 그 밖의 작업에서는 권장한다.</p>
+<p>절차: 통과 상태에서 시작해 → <strong>별도 작업 공간에</strong> 인접한 오류를 넣고 → 명령을 실행하고 → 이번 오류를 탐지했는지 기록하고 → 원상 복구하고 → 차이가 남지 않았는지 확인한 뒤 같은 명령을 다시 통과시킨다. 한 번의 뮤테이션은 그 오류 하나의 탐지력만 보여 준다.</p>
+<blockquote>
+<p><strong>참조 예시 작업의 뮤테이션 확인.</strong> <code>leftJoin(salesTeams)</code> → <code>innerJoin</code>으로 바꿨다.</p>
+</blockquote>
+<pre><code class="language-text">종료코드=1
+PASS (1) FAIL (1)
+AssertionError: expected [ { id: 1, … } ] to have a length of 2 but got 1
+</code></pre>
+<blockquote>
+<p>잡았다. 팀 미배정 리드가 결과에서 빠진 것을 길이 단언이 잡아냈다.</p>
+<p><strong>그런데 2개 중 1개만 실패했다.</strong> 팀이 배정된 리드를 보는 첫 테스트는 <code>innerJoin</code>에서도 통과한다.
+<strong>경계 사례 테스트가 없었다면 이 버그는 검증을 통과했을 것이다.</strong></p>
+</blockquote>
+<h2 id="4-검증이-산출물을-비껴가는-두-가지-방식">4. 검증이 산출물을 비껴가는 두 가지 방식</h2>
+<h3 id="4-a-자기-사본을-검증한다">4-A. 자기 사본을 검증한다</h3>
+<p>테스트가 대상 코드를 호출하지 않고 <strong>같은 로직을 다시 구현해</strong> 검증하는 경우다. 통과해도 산출물은
+검증되지 않는다.</p>
+<blockquote>
+<p><strong>실증 — CRM 참고 예시 저장소의 기존 테스트.</strong> <code>src/__tests__/queries.test.ts</code>는 인메모리 DB에 스키마를 만들고
+drizzle 쿼리를 <strong>직접 재현해</strong> 단언한다. 서버 액션(<code>@/actions/queries/*</code>)을 import하지 않는다.
+따라서 <code>getLeads()</code>를 바꿔도 이 테스트는 아무것도 말해주지 않는다.</p>
+<p>참조 예시 작업은 그래서 <code>vi.mock(&quot;@/db&quot;)</code>로 인메모리 DB를 주입하고 <code>getLeads()</code>를 <strong>실제로 호출</strong>하는
+새 패턴을 도입해야 했다. <strong>&quot;테스트가 있다&quot;가 &quot;검증 수단이 있다&quot;는 뜻이 아니다.</strong></p>
+</blockquote>
+<h3 id="4-b-대표-사례만-본다">4-B. 대표 사례만 본다</h3>
+<p>정상 경로만 검증하면 경계에서 깨지는 변경을 통과시킨다. 3절이 그 실례다.</p>
+<p><strong>수용 기준마다 최소 한 개의 단언을 붙인다.</strong> 참조 예시 작업의 수용 기준 3번(팀 미배정 리드가 누락되지
+않는다)이 <code>innerJoin</code>을 잡은 유일한 단언이었다.</p>
+<h2 id="5-검증-수단이-없을-때--계층-선택">5. 검증 수단이 없을 때 — 계층 선택</h2>
+<p>기존 검증 수단이 없으면 **만드는 것이 첫 <code>T#</code>**다. 어느 계층에서 만들지는 비용과 강도를 따져 선택한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>계층</th>
+<th>비용</th>
+<th>강도</th>
+<th>쓸 때</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>타입·컴파일 (<code>build</code>, <code>tsc</code>)</td>
+<td>최저</td>
+<td>낮음 — 형태만</td>
+<td>항상 병행. 단독으로는 부족</td>
+</tr>
+<tr>
+<td>린트·포맷</td>
+<td>최저</td>
+<td>낮음 — 규약만</td>
+<td>항상 병행</td>
+</tr>
+<tr>
+<td>단위 (순수 함수)</td>
+<td>낮음</td>
+<td>중간</td>
+<td>로직이 순수하게 분리될 때</td>
+</tr>
+<tr>
+<td><strong>통합 (DB·의존성 주입)</strong></td>
+<td>중간</td>
+<td><strong>높음</strong></td>
+<td>대부분의 레거시 작업. 참조 예시 작업이 여기</td>
+</tr>
+<tr>
+<td>계약·스키마 대조</td>
+<td>중간</td>
+<td>높음</td>
+<td>마이그레이션 전후 동등성</td>
+</tr>
+<tr>
+<td>E2E·브라우저</td>
+<td>높음</td>
+<td>높음</td>
+<td>실제 사용자 흐름이 위험의 중심일 때</td>
+</tr>
+</tbody></table></div>
+<p><strong>판단 기준:</strong> 변경이 가장 깨지기 쉬운 경계를 실제로 실행하는 계층을 고른다. 모든 계층을 모든 <code>T#</code>에 붙이지 않는다. 계산은 단위, DB·연동은 통합, 사용자 화면 흐름은 브라우저 검증을 우선 검토한다. 검사를 빨리 끝내려고 필요한 검증을 빼지 않는다. 전체 회귀 검사가 길면 실행 시점을 나눠 작업 계약에 적는다. 변경 유형별 예는 <a class="wiki-doc-path" href="JAVA_SPRING_BOOT_PROFILE.html"><code>JAVA_SPRING_BOOT_PROFILE.md</code></a>의 검증 선택표에 있다.</p>
+<blockquote>
+<p><strong>2주를 넘길 전망이면 범위를 교체한다.</strong> 대상 코드베이스에 테스트·CI가 없어 검증 수단을 만드는 데 일정이 잠식되는
+위험을 막는 규칙이다. 검증할 수 있는 영역으로 범위를 바꾸는 것은 PM이 고객과 합의해 정한다
+(범위를 바꾸는 수용 기준에는 고객이 동의한다). 검증 도구를 만드는 데 프로젝트 기간을 다 쓰면
+개발 목표도 판단할 근거도 남지 않는다.</p>
+</blockquote>
+<h2 id="6-금지-패턴">6. 금지 패턴</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>금지</th>
+<th>왜</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>agent가 스스로 한 보고를 판단 근거로 쓴다</td>
+<td>참조 예시 작업에서 agent는 스스로 검증했다고 보고했다. 구현하지 않은 agent가 다시 확인하는 리뷰가 있는 이유다</td>
+</tr>
+<tr>
+<td>문자열 일부만 찾아 성공으로 판단한다</td>
+<td>검증기는 대상·기대값·누락·실행 오류를 구분해야 한다. 실패하면 비정상 종료코드를 반환해야 한다</td>
+</tr>
+<tr>
+<td>스냅샷을 검토 없이 갱신한다</td>
+<td>틀린 출력을 기준으로 고정해 버린다</td>
+</tr>
+<tr>
+<td>파이프라인 종료코드를 명령 종료코드로 쓴다</td>
+<td><code>cmd | tail</code> 의 <code>$?</code>는 <code>tail</code>의 것이다 (실제로 발생한 오류)</td>
+</tr>
+<tr>
+<td>종료코드 0을 실행 증거로 쓴다</td>
+<td>실행되지 않은 명령도 0을 낸다. 실행 건수와 소요 시간이 그럴듯한지 한 번은 본다</td>
+</tr>
+<tr>
+<td><code>--force</code>·<code>--no-verify</code>로 통과시킨다</td>
+<td>게이트를 끄는 것이다</td>
+</tr>
+</tbody></table></div>
+<h3 id="실패-신호">실패 신호</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>신호</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>검사가 대상 모듈을 import하거나 호출하지 않는다</td>
+<td>통합 접점이나 주입 지점을 만든다</td>
+</tr>
+<tr>
+<td>종료코드 0인데 실행 건수나 시간이 이상하다</td>
+<td>명령을 부른 방식과 리포트의 건수를 확인한다</td>
+</tr>
+<tr>
+<td>불안정한(flaky) 검사</td>
+<td>시간, 환경, 네트워크 의존을 떼어 내고, 안정되기 전에는 관문으로 쓰지 않는다</td>
+</tr>
+<tr>
+<td>전체 검사가 너무 느리다</td>
+<td>대상을 좁힌 빠른 관문과 따로 도는 회귀 관문을 두고 위험을 적는다</td>
+</tr>
+<tr>
+<td>이전 시스템과의 동등성 검사가 실패한다</td>
+<td>회귀로 단정하지 않는다. 기존 결함을 따라 할지 고칠지는 고객이 정한다</td>
+</tr>
+</tbody></table></div>
+<h2 id="7-작업-계약-작성-체크리스트">7. 작업 계약 작성 체크리스트</h2>
+<p>작업 계약서를 승인하기 전에 계획을 본다. 새 검사는 아직 만들어지지 않았다.</p>
+<ul>
+<li><input disabled="" type="checkbox"> 명령마다 종료코드로 판단한다</li>
+<li><input disabled="" type="checkbox"> 새 검사마다 구현 전에 어떤 확인 조건 때문에 실패해야 하는지 적혀 있다</li>
+<li><input disabled="" type="checkbox"> 보존 작업(마이그레이션·리팩터링)은 비교 기준이 될 통과 결과를 남기고 뮤테이션 확인을 하도록 적혀 있다</li>
+<li><input disabled="" type="checkbox"> 빠른 검사와 전체 회귀 검사의 실행 시점이 작업 계약서에 있다</li>
+<li><input disabled="" type="checkbox"> 검사가 대상 코드를 실제로 호출하거나 검사한다(자기 사본이 아니다)</li>
+<li><input disabled="" type="checkbox"> <strong>수용 기준마다 확인 조건이 하나 이상 있다</strong> — 특히 경계 사례</li>
+<li><input disabled="" type="checkbox"> 기존 린트·빌드를 함께 돌리는 명령으로 넣었다</li>
+<li><input disabled="" type="checkbox"> 결과가 매번 같게 나온다</li>
+</ul>
+<p>구현한 뒤, 리뷰를 맡기기 전에 증거 파일 <code>docs/evidence/T&lt;N&gt;.md</code>에서 실행 결과를 본다.</p>
+<ul>
+<li><input disabled="" type="checkbox"> 새 검사의 red가 적어 둔 확인 조건 때문에 실패했다(모듈 없음, 설정 오류가 아니다)</li>
+<li><input disabled="" type="checkbox"> 보존 작업은 비교 기준이 된 통과 결과와 뮤테이션 확인 결과가 있다(그 밖의 작업은 권장)</li>
+<li><input disabled="" type="checkbox"> 마지막으로 고친 뒤 모든 검사가 통과했다(green)</li>
+</ul>
+<p>명령은 작업 계약서의 <code>## 검증 명령</code>에 <strong>새 검사마다 하나씩</strong> 적는다. <code>/nexi-implement</code>가 명령마다 종료코드를 증거 파일에 남긴다.</p>
+
+</main>
+</article><aside class="wiki-side" aria-label="이 칸"><h2>이 칸</h2><ul class="related"><li><a href="../../index.html#sec-reference">참조 목록</a></li><li><a href="../../index.html">문서 홈</a></li></ul></aside></div>
+</body>
+</html>
