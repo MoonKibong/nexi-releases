@@ -21,66 +21,6 @@ th { background: #eef4f7; }
 .mermaid svg { max-width: 100%; height: auto; }
 @media (max-width: 760px) { body { font-size: 15px; } table { min-width: 620px; } }
 </style>
-<style id="practice-wiki-shell">
-.wiki-content ol + pre, .wiki-content ol + .table-scroll { margin-left:2.2em; }
-.wiki-content blockquote.wiki-alert { border-left:4px solid #1793d1; background:#eef6fb; color:#1f2933; padding:10px 14px; margin:16px 0; }
-.wiki-content blockquote.wiki-alert .wiki-alert-title { display:block; font-weight:700; margin-bottom:4px; }
-.wiki-content blockquote.wiki-alert-tip { border-left-color:#1a7f37; background:#eef8f0; }
-.wiki-content blockquote.wiki-alert-important { border-left-color:#8250df; background:#f5f0fd; }
-.wiki-content blockquote.wiki-alert-warning { border-left-color:#bf8700; background:#fff8e5; }
-.wiki-content blockquote.reading-guide { border-left:4px solid #1793d1; background:#eef6fb; color:#45525e; font-size:14px; line-height:1.6; padding:8px 14px; margin:0 0 22px; }
-body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
-.page { max-width:none; width:100%; margin:0; padding:0; border:0; box-shadow:none; background:transparent; }
-.page > header { display:none; }
-.wiki-global { height:48px; background:#2e2e2e; border-bottom:5px solid #1793d1; color:#fff; display:flex; align-items:center; padding:0 calc((100% - 1840px)/2 + 42px); gap:28px; }
-.wiki-global strong { color:#fff; font-size:15px; letter-spacing:.02em; white-space:nowrap; }
-.wiki-global a { color:#d8d8d8; text-decoration:none; font-size:14px; font-weight:700; }
-.wiki-global a:hover, .wiki-global a:focus, .wiki-global a[aria-current] { color:#fff; text-decoration:underline; }
-.wiki-tools { max-width:1840px; margin:auto; min-height:76px; padding:18px 42px; display:flex; align-items:center; gap:18px; }
-.wiki-tools .crumb { color:#5b6770; font-size:14px; }
-.wiki-tools .home-link { margin-left:auto; color:#087bb8; font-weight:700; text-decoration:none; }
-.audience-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; }
-.audience-internal { background:#5d4037; color:#fff; }
-.audience-client { background:#156f3c; color:#fff; }
-.audience-unspecified { background:#e7ebee; color:#46525a; }
-.asset-badges { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; }
-.asset-badge { display:inline-block; border-radius:3px; padding:2px 7px; font-size:12px; font-weight:700; background:#e9eff4; color:#25465c; }
-.asset-badge.status-reviewed { background:#156f3c; color:#fff; }
-.asset-badge.status-candidate { background:#755b16; color:#fff; }
-.wiki-all-pages { margin-top:46px; padding-top:18px; border-top:2px solid #aeb8c1; }
-.wiki-all-pages details { margin:8px 0; }
-.wiki-all-pages summary { cursor:pointer; color:#087bb8; font-weight:700; }
-.wiki-all-pages ul { margin:7px 0 14px; }
-.wiki-layout { max-width:1840px; margin:28px auto 52px; padding:0 42px; display:grid; grid-template-columns:250px minmax(0, 1fr) 230px; gap:34px; align-items:start; }
-.wiki-toc, .wiki-side { font-size:14px; position:sticky; top:20px; }
-.wiki-toc h2, .wiki-side h2 { font-size:16px; margin:0 0 10px; padding:0 0 9px; border-bottom:1px solid #c8d0d7; }
-.wiki-toc ul { list-style:none; margin:0; padding:0; }
-.wiki-toc li { margin:0; padding:5px 0; line-height:1.35; }
-.wiki-toc li.level-3 { padding-left:16px; font-size:13px; }
-.wiki-toc a, .wiki-side a { color:#087bb8; text-decoration:none; }
-.wiki-toc a:hover, .wiki-side a:hover { text-decoration:underline; }
-.wiki-content { min-width:0; background:#fff; border:1px solid #cbd3da; padding:38px 44px 56px; }
-.wiki-content main > h1:first-child { margin-top:0; font-size:38px; border-bottom:2px solid #aeb8c1; padding-bottom:12px; }
-.wiki-content h2 { border-bottom:1px solid #aeb8c1; font-size:28px; margin-top:38px; }
-.wiki-content h3 { font-size:20px; }
-.wiki-content a { color:#087bb8; font-weight:600; }
-.wiki-content a.wiki-doc-path code { color:inherit; }
-.wiki-content main > h3 + ul li { margin:3px 0; }
-.wiki-all-pages h3.toc-group { font-size:14px; margin:12px 0 4px; color:#5b6670; }
-.wiki-all-pages p.toc-more { font-size:13px; color:#5b6670; margin:6px 0 0; }
-.wiki-side { color:#4e5961; }
-.wiki-side p { margin:7px 0 14px; line-height:1.4; }
-.wiki-side .related { margin:0; padding-left:18px; }
-.docs-wiki-nav { display:none; }
-@media (max-width:900px) {
-  .wiki-global { padding:0 18px; gap:16px; overflow-x:auto; }
-  .wiki-tools { padding:16px 18px; min-height:60px; }
-  .wiki-layout { display:block; margin:12px auto 32px; padding:0 18px; }
-  .wiki-toc, .wiki-side { position:static; margin:18px 0; }
-  .wiki-content { padding:28px 24px 38px; }
-}
-</style>
-
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js" integrity="sha384-o+g/BxPwhi0C3RK7oQBxQuNimeafQ3GE/ST4iT2BxVI4Wzt60SH4pq9iXVYujjaS" crossorigin="anonymous"></script>
 <script>document.addEventListener('DOMContentLoaded', async () => {
   if (!window.mermaid) return;
@@ -99,11 +39,12 @@ body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans 
   }
 });
 </script>
+<link rel="stylesheet" href="../../assets/wiki/theme.css">
 </head>
 <body>
-<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-tutorials">따라하기 예제</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#1-검증-명령이-갖출-요건">1. 검증 명령이 갖출 요건</a></li><li class="level-3"><a href="#수용-기준과-경계-조건">수용 기준과 경계 조건</a></li><li class="level-2"><a href="#2-red-확인--실패했다가-아니라-맞는-이유로-실패했다">2. red 확인 — &quot;실패했다&quot;가 아니라 &quot;맞는 이유로 실패했다&quot;</a></li><li class="level-2"><a href="#3-강도-시험--뮤테이션-확인">3. 강도 시험 — 뮤테이션 확인</a></li><li class="level-2"><a href="#4-검증이-산출물을-비껴가는-두-가지-방식">4. 검증이 산출물을 비껴가는 두 가지 방식</a></li><li class="level-3"><a href="#4-a-자기-사본을-검증한다">4-A. 자기 사본을 검증한다</a></li><li class="level-3"><a href="#4-b-대표-사례만-본다">4-B. 대표 사례만 본다</a></li><li class="level-2"><a href="#5-검증-수단이-없을-때--계층-선택">5. 검증 수단이 없을 때 — 계층 선택</a></li><li class="level-2"><a href="#6-금지-패턴">6. 금지 패턴</a></li><li class="level-3"><a href="#실패-신호">실패 신호</a></li><li class="level-2"><a href="#7-작업-계약-작성-체크리스트">7. 작업 계약 작성 체크리스트</a></li></ul></aside><article class="page wiki-content">
+<a class="wiki-skip" href="#wiki-main">본문으로 건너뛰기</a><header class="wiki-masthead"><div class="wiki-brand-row"><a class="wiki-brand" href="../../index.html"><img src="../../assets/wiki/ai-worx-logo.png" alt="Ai worX 그룹 로고" width="486" height="135"></a><a class="wiki-product" href="../../index.html">NEXI</a><span class="wiki-affiliation">대보디엑스 <span>· Ai worX 그룹</span></span></div><nav class="wiki-global" aria-label="전역 탐색"><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-tutorials">따라하기 예제</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav></header><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#1-검증-명령이-갖출-요건">1. 검증 명령이 갖출 요건</a></li><li class="level-3"><a href="#수용-기준과-경계-조건">수용 기준과 경계 조건</a></li><li class="level-2"><a href="#2-red-확인--실패했다가-아니라-맞는-이유로-실패했다">2. red 확인 — &quot;실패했다&quot;가 아니라 &quot;맞는 이유로 실패했다&quot;</a></li><li class="level-2"><a href="#3-강도-시험--뮤테이션-확인">3. 강도 시험 — 뮤테이션 확인</a></li><li class="level-2"><a href="#4-검증이-산출물을-비껴가는-두-가지-방식">4. 검증이 산출물을 비껴가는 두 가지 방식</a></li><li class="level-3"><a href="#4-a-자기-사본을-검증한다">4-A. 자기 사본을 검증한다</a></li><li class="level-3"><a href="#4-b-대표-사례만-본다">4-B. 대표 사례만 본다</a></li><li class="level-2"><a href="#5-검증-수단이-없을-때--계층-선택">5. 검증 수단이 없을 때 — 계층 선택</a></li><li class="level-2"><a href="#6-금지-패턴">6. 금지 패턴</a></li><li class="level-3"><a href="#실패-신호">실패 신호</a></li><li class="level-2"><a href="#7-작업-계약-작성-체크리스트">7. 작업 계약 작성 체크리스트</a></li></ul></aside><article class="page wiki-content"><details class="wiki-mobile-toc"><summary>이 문서의 목차</summary><ul><li class="level-2"><a href="#1-검증-명령이-갖출-요건">1. 검증 명령이 갖출 요건</a></li><li class="level-3"><a href="#수용-기준과-경계-조건">수용 기준과 경계 조건</a></li><li class="level-2"><a href="#2-red-확인--실패했다가-아니라-맞는-이유로-실패했다">2. red 확인 — &quot;실패했다&quot;가 아니라 &quot;맞는 이유로 실패했다&quot;</a></li><li class="level-2"><a href="#3-강도-시험--뮤테이션-확인">3. 강도 시험 — 뮤테이션 확인</a></li><li class="level-2"><a href="#4-검증이-산출물을-비껴가는-두-가지-방식">4. 검증이 산출물을 비껴가는 두 가지 방식</a></li><li class="level-3"><a href="#4-a-자기-사본을-검증한다">4-A. 자기 사본을 검증한다</a></li><li class="level-3"><a href="#4-b-대표-사례만-본다">4-B. 대표 사례만 본다</a></li><li class="level-2"><a href="#5-검증-수단이-없을-때--계층-선택">5. 검증 수단이 없을 때 — 계층 선택</a></li><li class="level-2"><a href="#6-금지-패턴">6. 금지 패턴</a></li><li class="level-3"><a href="#실패-신호">실패 신호</a></li><li class="level-2"><a href="#7-작업-계약-작성-체크리스트">7. 작업 계약 작성 체크리스트</a></li></ul></details><nav class="wiki-pager" aria-label="문서 이동"><p class="wiki-reader-context">참조<a href="../reference/README.html">참조 목록으로</a></p></nav>
 <header><h1 id="page-title">검증 명령 규약</h1></header>
-<main>
+<main id="wiki-main" tabindex="-1">
 <h1 id="검증-명령-규약">검증 명령 규약</h1>
 <blockquote class="reading-guide"><strong>읽기 안내</strong> — 누가: 작업 계약서를 쓰는 FDE, 승인하는 PM, 구현하는 개발자, 리뷰를 확인하는 검토자 ·
 언제: 작업 계약서의 검증 명령을 정하거나 승인하기 전 ·
@@ -354,6 +295,6 @@ drizzle 쿼리를 <strong>직접 재현해</strong> 단언한다. 서버 액션(
 <p>명령은 작업 계약서의 <code>## 검증 명령</code>에 <strong>새 검사마다 하나씩</strong> 적는다. <code>/nexi-implement</code>가 명령마다 종료코드를 증거 파일에 남긴다.</p>
 
 </main>
-</article><aside class="wiki-side" aria-label="이 칸"><h2>이 칸</h2><ul class="related"><li><a href="../../index.html#sec-reference">참조 목록</a></li><li><a href="../../index.html">문서 홈</a></li></ul></aside></div>
+<nav class="wiki-pager" aria-label="문서 이동"><p class="wiki-reader-context">참조<a href="../reference/README.html">참조 목록으로</a></p></nav></article><aside class="wiki-side" aria-label="주제 문서"><nav class="wiki-reading-list" aria-label="참조 문서"><h2>참조</h2><ul><li><a href="../reference/README.html">참조</a></li><li><a href="../reference/ARTIFACTS.html">NEXI 산출물 참조</a></li><li><a href="../reference/CONCEPTS.html">개념 참조</a></li><li><a href="../reference/ENVIRONMENT.html">환경 프로필</a></li><li><a href="../reference/FORMS.html">양식</a></li><li><a href="JAVA_SPRING_BOOT_PROFILE.html">Java Spring Boot 프로필</a></li><li><a href="ONTOLOGY_ARCHITECTURE.html">온톨로지 참조 아키텍처</a></li><li><a aria-current="page" href="VERIFICATION_CONVENTION.html">검증 명령 규약</a></li><li><a href="../assets/README.html">NEXI 키트</a></li></ul></nav></aside></div>
 </body>
 </html>
