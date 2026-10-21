@@ -101,7 +101,7 @@ body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans 
 </script>
 </head>
 <body>
-<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#nexi-키트-내려받기">NEXI 키트 내려받기</a></li></ul></aside><article class="page wiki-content">
+<nav class="wiki-global" aria-label="전역 탐색"><strong>NEXI</strong><a href="../../index.html">문서 홈</a><a href="../../index.html#sec-start">시작하기</a><a href="../../index.html#sec-tutorials">따라하기 예제</a><a href="../../index.html#sec-how-to">하는 법</a><a href="../../index.html#sec-reference" aria-current="true">참조</a></nav><div class="wiki-tools"><span class="crumb">공개 위키 · 참조</span><a class="home-link" href="../../index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#nexi-키트-내려받기">NEXI 키트 내려받기</a></li></ul></aside><article class="page wiki-content">
 <header><h1 id="page-title">NEXI 키트</h1></header>
 <main>
 <h1 id="nexi-키트">NEXI 키트</h1>
@@ -114,8 +114,8 @@ body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans 
 처리, 도구 정책을 확인한다.</p>
 <h2 id="nexi-키트-내려받기">NEXI 키트 내려받기</h2>
 <p>현재 공개 다운로드는 준비 중이다. Rust 전환과 플랫폼별 검증을 마친 키트를 공개 배포할 예정이다.
-아래 ZIP은 내부 위키의 배포용이며 공개 위키에는 들어 있지 않다. 공개 위키를 읽는 사람은 키트를 받은 뒤 설치 절차를 진행한다.</p>
-<p><strong>내부 배포 ZIP: nexi-kit.zip</strong> — skill 열 개와 설치 안내(<code>INSTALL.txt</code>)가 들어 있다. <code>nexi-contract</code> 폴더에는
+키트를 받은 뒤 아래 설치 절차를 진행한다.</p>
+<p>키트에는 skill 열 개와 설치 안내(<code>INSTALL.txt</code>)가 들어 있다. <code>nexi-contract</code> 폴더에는
 <a href="../implementation-patterns/README.html">구현 패턴</a>도 들어 있다. skill끼리 서로의 폴더에 있는 파일(판정 형식, 수용 조건, 변경 지문
 스크립트, 구현 패턴)을 읽으므로 열 개를 같은 skill 폴더에 함께 설치한다.</p>
 <div class="table-scroll"><table>
@@ -127,52 +127,52 @@ body { background:#f4f6f8; font-family:Arial, "Apple SD Gothic Neo", "Noto Sans 
 </tr>
 </thead>
 <tbody><tr>
-<td>nexi-init</td>
+<td><a href="../reference/skills/nexi-init.html">nexi-init</a></td>
 <td>Claude Code</td>
 <td>개발 도구를 확인하고 GitHub 저장소와 작업 규칙(<code>AGENTS.md</code>)을 만든다. 팀이면 팀원을 초대한다</td>
 </tr>
 <tr>
-<td>nexi-requirements</td>
+<td><a href="../reference/skills/nexi-requirements.html">nexi-requirements</a></td>
 <td>Claude Code</td>
 <td>요구사항을 분석해 질문을 만들고, 답을 받아 결정 문서를 쓰고, 사람의 승인을 기록한다</td>
 </tr>
 <tr>
-<td>nexi-backlog</td>
+<td><a href="../reference/skills/nexi-backlog.html">nexi-backlog</a></td>
 <td>Claude Code</td>
 <td>요구사항을 하루 안에 끝낼 작업으로 나누고 순서를 정한다. 다음 작업 고르기, 나누기, 변경, 담당 바꾸기도 한다</td>
 </tr>
 <tr>
-<td>nexi-contract</td>
+<td><a href="../reference/skills/nexi-contract.html">nexi-contract</a></td>
 <td>Claude Code</td>
 <td>작업 하나의 작업 계약서를 쓰고 사람의 승인을 기록한다</td>
 </tr>
 <tr>
-<td>nexi-design</td>
+<td><a href="../reference/skills/nexi-design.html">nexi-design</a></td>
 <td>Claude Code</td>
 <td>화면의 디자인 기준(색, 글꼴, 간격, 구성 요소, 화면별 상태)을 쓴다</td>
 </tr>
 <tr>
-<td>nexi-implement</td>
+<td><a href="../reference/skills/nexi-implement.html">nexi-implement</a></td>
 <td>Claude Code</td>
 <td>승인된 작업 계약서대로 구현한다. 새 검사가 먼저 실패하고 나중에 통과하는 것을 증거로 남긴다</td>
 </tr>
 <tr>
-<td>nexi-review</td>
+<td><a href="../reference/skills/nexi-review.html">nexi-review</a></td>
 <td>Codex, Claude Code</td>
 <td>구현하지 않은 agent(보통 Codex)가 읽기 전용으로 리뷰하고 APPROVE, REVISE, BLOCK 중 하나로 판정한다. 판정 기록은 Claude Code가 남긴다</td>
 </tr>
 <tr>
-<td>nexi-merge</td>
+<td><a href="../reference/skills/nexi-merge.html">nexi-merge</a></td>
 <td>Claude Code</td>
 <td>리뷰받은 변경을 <code>main</code>에 넣고 이슈를 닫는다. 중간에 끊겼으면 같은 프롬프트를 다시 넣어 이어 간다</td>
 </tr>
 <tr>
-<td>nexi-finish</td>
+<td><a href="../reference/skills/nexi-finish.html">nexi-finish</a></td>
 <td>Claude Code</td>
 <td>저장소를 새로 받은 사본에서 설치부터 lint까지 돌려 최종 보고를 쓰고, 사람이 써 볼 앱을 띄운다</td>
 </tr>
 <tr>
-<td>nexi-run</td>
+<td><a href="../reference/skills/nexi-run.html">nexi-run</a></td>
 <td>Claude Code</td>
 <td>선택 기능. 구현, Codex 리뷰, 판정 기록을 되풀이한다. APPROVE, BLOCK, 연속 세 번째 REVISE에서 멈춘다. 병합은 하지 않는다</td>
 </tr>
