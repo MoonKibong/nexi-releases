@@ -12,7 +12,7 @@ a:focus-visible, summary:focus-visible { outline:3px solid #007da8; outline-offs
 .page > header { display:none; }
 .wiki-masthead { background:#fff; border-bottom:1px solid var(--line); }
 .wiki-brand-row { max-width:1520px; margin:auto; display:flex; align-items:center; gap:28px; padding:22px 40px 18px; }
-.wiki-brand { display:flex; flex-shrink:0; }
+.wiki-brand { display:flex; flex-shrink:0; align-items:center; min-height:50px; }
 .wiki-brand img { display:block; width:180px; height:auto; }
 .wiki-product { border-left:1px solid var(--line); padding-left:28px; font-family:Sora,SUIT,sans-serif; color:var(--navy); font-size:22px; font-weight:650; text-decoration:none; letter-spacing:-.05em; }
 .wiki-affiliation { margin-left:auto; font-size:12px; color:var(--muted); letter-spacing:.01em; }
@@ -92,6 +92,7 @@ a:focus-visible, summary:focus-visible { outline:3px solid #007da8; outline-offs
 }
 @media (max-width:800px) {
   .wiki-brand-row { padding:18px 20px 12px; gap:18px; flex-wrap:wrap; }
+  .wiki-brand { min-height:41px; }
   .wiki-brand img { width:148px; }
   .wiki-product { font-size:20px; padding-left:18px; }
   .wiki-affiliation { flex-basis:100%; margin:0; font-size:11px; }
