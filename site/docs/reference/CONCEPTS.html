@@ -83,6 +83,7 @@ th { background: #eef4f7; }
 <li>혼자(solo): 한 사람이 한 폴더의 <code>main</code>에서 일한다. 작업의 변경은 리뷰에서 APPROVE를 받은 뒤 <code>nexi-merge</code>가 한 번에 commit한다.</li>
 <li>팀(team): 여러 사람이 각자의 컴퓨터에서 GitHub 저장소 하나를 같이 쓴다. 작업마다 branch를 쓰고, 단계가 끝나면 skill이 commit과 push를 하고 이슈에 댓글을 남긴다. 병합은 PR로 한다.</li>
 </ul>
+<p>FDE는 고객 현장에서 결과를 책임지는 엔지니어다. 요구사항을 분석하고 작업 계약서 초안을 쓴다.</p>
 <p>팀의 역할은 다음과 같다.</p>
 <div class="table-scroll"><table>
 <thead>
@@ -142,6 +143,8 @@ th { background: #eef4f7; }
 </tbody></table></div>
 <p><code>main</code>의 변경은 각 branch에 merge로 받는다. 어느 skill도 rebase나 force push를 하지 않는다.</p>
 <h2 id="작업">작업</h2>
+<p>작업 계약서는 작업 하나에서 만들 것, 하지 않을 것, 끝났다고 볼 기준, 확인 방법을 적은 문서다.
+사람이 승인해야 구현을 시작한다.</p>
 <ul>
 <li>작업(<code>T#&lt;N&gt;</code>): 라벨 <code>task</code>가 붙은 GitHub 이슈 하나. 하루 안에 끝나는 크기다. 백로그는 골격, 코드 표준, 디자인 시스템(화면이 있으면), 기능 순서다.</li>
 <li>골격 작업: 백로그의 첫 작업. 기술 스택의 도구와 <code>make build</code>, <code>make test</code>, <code>make lint</code>, 실행 방법을 적은 README를 만든다.</li>

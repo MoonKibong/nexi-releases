@@ -42,7 +42,7 @@ th { background: #eef4f7; }
 <link rel="stylesheet" href="assets/wiki/theme.css">
 </head>
 <body>
-<a class="wiki-skip" href="#wiki-main">본문으로 건너뛰기</a><header class="wiki-masthead"><div class="wiki-brand-row"><a class="wiki-brand" href="index.html"><img src="assets/wiki/ai-worx-logo.png" alt="Ai worX 그룹 로고" width="180" height="34"></a><a class="wiki-product" href="index.html">NEXI</a><span class="wiki-affiliation">대보디엑스 <span>· Ai worX 그룹</span></span></div><nav class="wiki-global" aria-label="전역 탐색"><a href="index.html">문서 홈</a><a href="index.html#sec-start">시작하기</a><a href="index.html#sec-tutorials">따라하기 예제</a><a href="index.html#sec-how-to">하는 법</a><a href="index.html#sec-reference">참조</a></nav></header><div class="wiki-tools"><span class="crumb">공개 위키 · 문서 홈</span><a class="home-link" href="index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#시작하기">시작하기</a></li><li class="level-2"><a href="#nexi로-일하는-순서">NEXI로 일하는 순서</a></li><li class="level-2"><a href="#용어">용어</a></li></ul></aside><article class="page wiki-content"><details class="wiki-mobile-toc"><summary>이 문서의 목차</summary><ul><li class="level-2"><a href="#시작하기">시작하기</a></li><li class="level-2"><a href="#nexi로-일하는-순서">NEXI로 일하는 순서</a></li><li class="level-2"><a href="#용어">용어</a></li></ul></details>
+<a class="wiki-skip" href="#wiki-main">본문으로 건너뛰기</a><header class="wiki-masthead"><div class="wiki-brand-row"><a class="wiki-brand" href="index.html"><img src="assets/wiki/ai-worx-logo.png" alt="Ai worX 그룹 로고" width="180" height="34"></a><a class="wiki-product" href="index.html">NEXI</a><span class="wiki-affiliation">대보디엑스 <span>· Ai worX 그룹</span></span></div><nav class="wiki-global" aria-label="전역 탐색"><a href="index.html">문서 홈</a><a href="index.html#sec-start">시작하기</a><a href="index.html#sec-tutorials">따라하기 예제</a><a href="index.html#sec-how-to">하는 법</a><a href="index.html#sec-reference">참조</a></nav></header><div class="wiki-tools"><span class="crumb">공개 위키 · 문서 홈</span><a class="home-link" href="index.html">문서 홈으로</a></div><div class="wiki-layout"><aside class="wiki-toc" aria-label="이 문서 목차"><h2>목차</h2><ul><li class="level-2"><a href="#시작하기">시작하기</a></li><li class="level-2"><a href="#nexi로-일하는-순서">NEXI로 일하는 순서</a></li></ul></aside><article class="page wiki-content"><details class="wiki-mobile-toc"><summary>이 문서의 목차</summary><ul><li class="level-2"><a href="#시작하기">시작하기</a></li><li class="level-2"><a href="#nexi로-일하는-순서">NEXI로 일하는 순서</a></li></ul></details>
 <header><h1 id="page-title">NEXI</h1></header>
 <main id="wiki-main" tabindex="-1">
 <h1 id="nexi">NEXI</h1>
@@ -98,7 +98,7 @@ th { background: #eef4f7; }
 </thead>
 <tbody><tr>
 <td>1. 요구 확인</td>
-<td>고객, PM, FDE가 목표, 예외, 우선순위, 이번 범위를 정한다</td>
+<td>고객, PM, <a href="docs/reference/CONCEPTS.html#%ED%98%BC%EC%9E%90%EC%99%80-%ED%8C%80-%EC%97%AD%ED%95%A0">FDE</a>가 목표, 예외, 우선순위, 이번 범위를 정한다</td>
 <td>요구사항 결정 문서, 아직 답이 없는 질문</td>
 </tr>
 <tr>
@@ -109,7 +109,7 @@ th { background: #eef4f7; }
 <tr>
 <td>3. 작업 준비</td>
 <td>FDE가 작업의 완료 기준과 확인 방법을 쓰고 PM이 승인한다</td>
-<td>작업 계약서</td>
+<td><a href="docs/reference/CONCEPTS.html#%EC%9E%91%EC%97%85">작업 계약서</a></td>
 </tr>
 <tr>
 <td>4. 구현</td>
@@ -132,17 +132,6 @@ th { background: #eef4f7; }
 <td>실패와 고친 기록, 다음 이터레이션 계획</td>
 </tr>
 </tbody></table></div>
-<h2 id="용어">용어</h2>
-<ul>
-<li><strong><code>T#</code></strong> — 하루 안에 끝내고 검증할 수 있는 작업 하나. GitHub 이슈 번호로 부른다.</li>
-<li><strong>FDE</strong> — 고객 현장에서 결과를 책임지는 엔지니어. 요구사항을 분석하고 작업 계약서 초안을 쓴다.</li>
-<li><strong>작업 계약서</strong> — 작업 하나에서 만들 것, 하지 않을 것, 끝났다고 볼 기준, 확인 방법을 적은 문서. 사람이 승인해야 구현을 시작한다.</li>
-<li><strong>PR, SHA</strong> — PR은 코드 변경을 검토받아 합치는 요청이다. SHA는 commit 하나를 가리키는 고유 번호다.</li>
-</ul>
-<p>다른 말의 뜻은 <a href="docs/reference/CONCEPTS.html">개념 참조</a>에 있다.</p>
-<p>skill을 실행하다 막히면 <a href="docs/reference/SKILLS.html">skill 참조</a>에서 필요한 입력과 다음 프롬프트를 찾는다.
-키트 버전을 맞추거나 중단한 작업을 이어 갈 때는 <a href="docs/reference/skills/COMMON.html">공통 규칙</a>을 따른다.</p>
-<p>문서는 아래 위키 목차와, 목차에 있는 안내 문서의 링크에서 찾는다.</p>
 
 <section class="wiki-all-pages" id="wiki-all-pages"><h2>위키 목차</h2><details id="sec-start" open><summary>시작하기</summary><ul><li><a href="docs/start/README.html">시작하기</a> </li><li><a href="docs/start/00_PREPARE.html">준비</a> </li><li><a href="docs/start/01_START.html">프로젝트 시작</a> </li><li><a href="docs/start/02_REQUIREMENTS.html">요구사항</a> </li><li><a href="docs/start/03_BACKLOG.html">백로그</a> </li><li><a href="docs/start/04_TASK_CYCLE.html">작업 순환</a> </li><li><a href="docs/start/05_TEAM.html">팀으로 일하기</a> </li><li><a href="docs/start/06_CHANGE.html">끝난 작업 바꾸기</a> </li><li><a href="docs/start/07_FINISH.html">끝내기와 넘기기</a> </li></ul></details><details id="sec-tutorials" open><summary>따라하기 예제</summary><ul><li><a href="docs/practice/CRM_SOLO_REPRODUCTION.html">혼자 CRM 만들어 보기</a> </li><li><a href="docs/practice/CRM_TEAM_REPRODUCTION.html">다섯 명이 CRM 만들어 보기</a> </li></ul></details><details id="sec-how-to" open><summary>하는 법</summary><ul><li><a href="docs/how-to/README.html">하는 법</a> </li><li><a href="docs/how-to/LEGACY_START.html">레거시 코드가 있는 저장소에서 시작하기</a> </li><li><a href="docs/how-to/TEAM_EXISTING_REPO.html">이미 있는 저장소에 팀 모드 들이기</a> </li><li><a href="docs/how-to/ENGAGEMENT.html">착수 합의와 견적</a> </li><li><a href="docs/how-to/CODEX_PRIMARY.html">Codex를 주 agent로 쓰기</a> </li><li><a href="docs/how-to/COST.html">비용과 시간 기록하기</a> </li><li><a href="docs/how-to/INCIDENT_RELEASE.html">배포와 장애 대응</a> </li><li><a href="docs/how-to/HANDOVER.html">인수인계</a> </li></ul><h3 class="toc-group">진행 가이드</h3><ul><li><a href="docs/how-to/SOLO_GUIDE.html">혼자 진행하기</a> </li><li><a href="docs/how-to/TEAM_GUIDE.html">팀으로 진행하기</a> </li><li><a href="docs/how-to/MIGRATION_GUIDE.html">새 저장소로 시스템 옮기기</a> </li></ul></details><details id="sec-reference" open><summary>참조</summary><ul><li><a href="docs/reference/README.html">참조</a> </li></ul><h3 class="toc-group">NEXI 키트</h3><ul><li><a href="docs/assets/README.html">NEXI 키트</a> </li><li><a href="docs/reference/SKILLS.html">NEXI 키트 skill 참조</a> </li><li><a href="docs/reference/ARTIFACTS.html">NEXI 산출물 참조</a> </li><li><a href="docs/reference/CONCEPTS.html">개념 참조</a> </li><li><a href="docs/reference/ENVIRONMENT.html">환경 프로필</a> </li></ul><h3 class="toc-group">검증과 양식</h3><ul><li><a href="docs/patterns/VERIFICATION_CONVENTION.html">검증 명령 규약</a> </li><li><a href="docs/reference/FORMS.html">양식</a> </li><li><a href="docs/implementation-patterns/README.html">구현 패턴</a> </li></ul><h3 class="toc-group">조건이 맞을 때만 쓰는 기법</h3><ul><li><a href="docs/patterns/JAVA_SPRING_BOOT_PROFILE.html">Java Spring Boot 프로필</a> </li><li><a href="docs/patterns/ONTOLOGY_ARCHITECTURE.html">온톨로지 참조 아키텍처</a> </li></ul><h3 class="toc-group">skill 상세</h3><ul><li><a href="docs/reference/skills/COMMON.html">skill 공통 규칙</a> </li><li><a href="docs/reference/skills/nexi-init.html">nexi-init — 프로젝트 시작</a> </li><li><a href="docs/reference/skills/nexi-requirements.html">nexi-requirements — 요구사항 결정</a> </li><li><a href="docs/reference/skills/nexi-backlog.html">nexi-backlog — 작업 목록과 다음 작업</a> </li><li><a href="docs/reference/skills/nexi-contract.html">nexi-contract — 작업 계약서</a> </li><li><a href="docs/reference/skills/nexi-design.html">nexi-design — 화면의 디자인 기준</a> </li><li><a href="docs/reference/skills/nexi-implement.html">nexi-implement — 계약서대로 구현</a> </li><li><a href="docs/reference/skills/nexi-review.html">nexi-review — 독립 리뷰와 판정 기록</a> </li><li><a href="docs/reference/skills/nexi-merge.html">nexi-merge — 병합과 작업 수용</a> </li><li><a href="docs/reference/skills/nexi-finish.html">nexi-finish — 전체 검증과 최종 확인</a> </li><li><a href="docs/reference/skills/nexi-run.html">nexi-run — 구현과 리뷰 반복</a> </li></ul><p class="toc-more">이 칸의 다른 문서 9개는 위 문서에서 링크로 연다.</p></details></section></main>
 </article><aside class="wiki-side" aria-label="이 칸"><h2>이 칸</h2><ul class="related"><li><a href="index.html#wiki-all-pages">위키 목차</a></li><li><a href="index.html">문서 홈</a></li></ul></aside></div>
